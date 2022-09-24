@@ -16,5 +16,22 @@ export class AppTopBarComponent {
 
     @ViewChild('topbarmenu') menu!: ElementRef;
 
-    constructor(public layoutService: LayoutService) { }
+    constructor(public layoutService: LayoutService) {
+        this.items = [{
+            label: 'Chuyin Barajas Jr',
+            items: [{
+                label: 'Ver Perfil',
+                icon: 'pi pi-user',
+                command: () => {
+                    console.log('Al Perfil')
+                }
+            }, {
+                label: 'Cerrar sesión',
+                icon: 'pi pi-sign-out',
+                routerLink: '/login'
+            }]
+        }]
+    }
+
+
 }

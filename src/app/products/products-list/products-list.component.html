@@ -1,9 +1,77 @@
+<p-toast position="top-right"></p-toast>
 <div class="grid">
     <div class="col-12">
         <div class="card">
             <h5>Productos</h5>
-
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Assumenda, sed qui dolorum culpa laboriosam id non dolore deserunt esse perspiciatis molestias tempore autem fugit neque porro suscipit sint ut. Eaque?
+            <div class="grid">
+                <div class="col-12">
+                    <div class="grid">
+                        <div class="col-offset-4 col-4 text-center">
+                            <div class="p-mb-3 mb-1">
+                                <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [disabled]="isFirstPage()"
+                                    styleClass="p-button-text"></p-button>
+                                <p-button type="button" icon="pi pi-refresh" (click)="reset()" styleClass="p-button-text"></p-button>
+                                <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [disabled]="isLastPage()"
+                                    styleClass="p-button-text"></p-button>
+                            </div>
+                        </div>
+                        <div class="col-4 text-right">
+                            <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-rounded" (click)="visibleSidebar = true"></button>
+                        </div>
+                    </div>
+                    
+                    <p-table [value]="products" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [(first)]="first"
+                        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} entradas"
+                        [rowsPerPageOptions]="[10,25,50]">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Nombre</th>
+                                <th class="text-center">Precio</th>
+                                <th class="text-center">Cantidad disponible</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-product>
+                            <tr>
+                                <td class="text-center">{{ product.id }}</td>
+                                <td class="text-center">{{ product.name | titlecase }}</td>
+                                <td class="text-center">$ {{ product.price | number: '1.2' }}</td>
+                                <td class="text-center">{{ product.amountAvailable }}</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+<p-sidebar #addProduct [(visible)]="visibleSidebar" position="right" [dismissible]="false" [showCloseIcon]="false" [closeOnEscape]="false" [baseZIndex]="10000">
+    <h1 style="font-weight:normal">Agregar</h1>
+    <div class="p-fluid">
+        <div class="field">
+            <label for="name">Nombre</label>
+            <input id="name" type="text" [formControl]="name" pInputText />
+            <small id="name-help" class="p-invalid" *ngIf="!name.valid && name.touched">Nombre es requerido.</small>
+        </div>
+        <div class="field">
+            <label for="price">Precio</label>
+            <input id="price" type="number" [formControl]="price" pInputText />
+            <small id="price-help" class="p-invalid" *ngIf="!price.valid && price.touched">Precio es requerido.</small>
+        </div>
+        <div class="field">
+            <label for="price">Cantidad Disponible</label>
+            <input id="price" type="number" [formControl]="amountAvailable" pInputText />
+            <small id="price-help" class="p-invalid" *ngIf="!amountAvailable.valid && amountAvailable.touched">Cantidad disponible es requerido.</small>
+        </div>
+        <div class="field">
+            <label for="description">Descripción</label>
+            <textarea name="description" [formControl]="description" pInputTextarea rows="5" cols="30"></textarea>
+            <small id="description-help" class="p-invalid" *ngIf="!description.valid && description.touched">Descripción es requerido.</small>
+        </div>
+    </div>
+    <div class="col-12 p-buttonset">
+        <button pButton pRipple label="Guardar" icon="pi pi-check" (click)="save()" [disabled]="!formValid()"></button>
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" (click)="cancel()" class="p-button-danger"></button>
+    </div>
+</p-sidebar>
