@@ -3,8 +3,10 @@ import { LayoutService } from "./service/app.layout.service";
 
 @Component({
     selector: 'app-footer',
-    templateUrl: './app.footer.component.html'
+    templateUrl: './app.footer.component.html',
+    styleUrls: ['./app.footer.component.scss']
 })
 export class AppFooterComponent {
+    test = new Date();
     constructor(public layoutService: LayoutService) { }
 }

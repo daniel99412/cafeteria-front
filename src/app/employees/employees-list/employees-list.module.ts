@@ -8,18 +8,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
 import { BadgeModule } from 'primeng/badge';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { MessageService } from 'primeng/api';
 
-import { ProductsListComponent } from './products-list.component';
-import { ProductsListRoutingModule } from './products-list-routing.module';
-import { ProductService } from '../service/product.service';
+import { EmployeesListComponent } from './employees-list.component';
+import { EmployeesListRoutingModule } from './employees-list-routing.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    ProductsListRoutingModule,
+    EmployeesListRoutingModule,
     TableModule,
     ButtonModule,
     SidebarModule,
@@ -32,7 +31,7 @@ import { ProductService } from '../service/product.service';
     BadgeModule,
     InputSwitchModule,
   ],
-  declarations: [ ProductsListComponent ],
-  providers: [ ProductService, MessageService ]
+  declarations: [ EmployeesListComponent ],
+  providers: [ MessageService ]
 })
-export class ProductsListModule { }
+export class EmployeesListModule { }

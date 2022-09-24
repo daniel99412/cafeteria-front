@@ -1,0 +1,13 @@
+.pulse {
+    animation: pulse .5s infinite ease-in-out alternate;
+}
+
+@keyframes pulse {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.2);
+    }
+}

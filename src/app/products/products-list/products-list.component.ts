@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MenuItem, MessageService } from 'primeng/api';
-import { Sidebar } from 'primeng/sidebar';
 import { tap } from 'rxjs';
 import { ProductService } from '../service/product.service';
 
@@ -11,9 +10,6 @@ import { ProductService } from '../service/product.service';
   styleUrls: ['./products-list.component.scss']
 })
 export class ProductsListComponent implements OnInit {
-
-  @ViewChild('addProduct') sidebar!: Sidebar;
-
   items!: MenuItem[];
   products!: [];
 
@@ -88,7 +84,7 @@ export class ProductsListComponent implements OnInit {
     this.productService.save(productToStore).pipe(
       tap(resp => {
         if (resp.status === 200) {
-          this.messageService.add({ severity: 'success', summary: 'Exito', detail: resp.message });
+          this.messageService.add({ severity: 'success', summary: '¡Éxito!', detail: resp.message });
           this.loadData();
           this.cancel();
         }
@@ -109,7 +105,7 @@ export class ProductsListComponent implements OnInit {
     this.productService.update(productToUpdate).pipe(
       tap(resp => {
         if(resp.status === 200) {
-          this.messageService.add({ severity: 'success', summary: 'Exito', detail: resp.message });
+          this.messageService.add({ severity: 'success', summary: '¡Éxito!', detail: resp.message });
           this.loadData();
           this.cancel();
         }

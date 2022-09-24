@@ -15,14 +15,15 @@ import { AppLayoutComponent } from "./layout/app.layout.component";
                     { path: 'documentation', loadChildren: () => import('./demo/components/documentation/documentation.module').then(m => m.DocumentationModule) },
                     { path: 'blocks', loadChildren: () => import('./demo/components/primeblocks/primeblocks.module').then(m => m.PrimeBlocksModule) },
                     { path: 'pages', loadChildren: () => import('./demo/components/pages/pages.module').then(m => m.PagesModule) },
-                    { path: 'products', loadChildren: () => import('./products/products.module').then(m => m.ProductsModule) }
+                    { path: 'products', loadChildren: () => import('./products/products.module').then(m => m.ProductsModule) },
+                    { path: 'employees', loadChildren: () => import('./employees/employees.module').then(m => m.EmployeesModule) }
                 ],
             },
             { path: 'auth', loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },
             { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },
             { path: 'landing', loadChildren: () => import('./demo/components/landing/landing.module').then(m => m.LandingModule) },
-            { path: 'pages/notfound', component: NotfoundComponent },
-            { path: '**', redirectTo: 'pages/notfound' },
+            { path: 'notfound', component: NotfoundComponent },
+            { path: '**', redirectTo: 'notfound' },
         ], { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled', onSameUrlNavigation: 'reload' })
     ],
     exports: [RouterModule]
