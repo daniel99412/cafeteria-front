@@ -19,12 +19,16 @@ export class ProductsListComponent implements OnInit {
 
   first = 0;
   rows = 10;
-  visibleSidebar!: boolean;
+  addProduct!: boolean;
+  editProduct!: boolean;
+  disabled = true;
 
+  id = new FormControl({value: null, disabled: true}, [Validators.required]);
   name = new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(45)]);
   price = new FormControl(null, [Validators.min(0), Validators.required]);
   amountAvailable = new FormControl(null, [Validators.min(0), Validators.required]);
   description = new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(100)]);
+  isActive = new FormControl(null, [Validators.required]);
 
   constructor(
     private productService: ProductService,
@@ -84,7 +88,7 @@ export class ProductsListComponent implements OnInit {
     this.productService.save(productToStore).pipe(
       tap(resp => {
         if (resp.status === 200) {
-          this.messageService.add({ severity: 'success', summary: 'Exito', detail: 'Producto agregado' });
+          this.messageService.add({ severity: 'success', summary: 'Exito', detail: resp.message });
           this.loadData();
           this.cancel();
         }
@@ -92,11 +96,51 @@ export class ProductsListComponent implements OnInit {
     ).subscribe();
   }
 
+  update() {
+    let productToUpdate = {
+      'id': this.id.value,
+      'name': this.name.value,
+      'price': this.price.value,
+      'amountAvailable': this.amountAvailable.value,
+      'description': this.description.value,
+      'isActive': this.isActive.value
+    }
+
+    this.productService.update(productToUpdate).pipe(
+      tap(resp => {
+        if(resp.status === 200) {
+          this.messageService.add({ severity: 'success', summary: 'Exito', detail: resp.message });
+          this.loadData();
+          this.cancel();
+        }
+      })
+    ).subscribe();
+  }
+
+  openUpdate(id: number) {
+    this.productService.findById(id).pipe(
+      tap(resp => {
+        this.id.setValue(resp.id);
+        this.name.setValue(resp.name);
+        this.price.setValue(resp.price);
+        this.amountAvailable.setValue(resp.amountAvailable);
+        this.description.setValue(resp.description);
+        this.isActive.setValue(resp.isActive);
+        
+        this.editProduct = true;
+      })
+    ).subscribe();
+  }
+
   cancel() {
-    this.visibleSidebar = false;
+    this.editProduct = false;
+    this.addProduct = false;
+
     this.name.reset(null);
     this.price.reset(null);
     this.amountAvailable.reset(null);
     this.description.reset(null);
+    this.id.reset(null);
+    this.isActive.reset(null);
   }
 }

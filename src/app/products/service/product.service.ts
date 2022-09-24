@@ -10,7 +10,16 @@ export class ProductService {
         return this.httpClient.get<any>(`${AppSettings.API}/product/`);
     }
 
+    findById(id: number) {
+        return this.httpClient.get<any>(`${AppSettings.API}/product/${id}`);
+    }
+
     save(product: any) {
         return this.httpClient.post<any>(`${AppSettings.API}/product/`, product);
+    }
+
+    update(product: any) {
+        console.log(product);
+        return this.httpClient.put<any>(`${AppSettings.API}/product/${product.id}`, product);
     }
 }

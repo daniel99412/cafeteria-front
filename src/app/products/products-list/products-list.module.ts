@@ -13,6 +13,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { BadgeModule } from 'primeng/badge';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 @NgModule({
   imports: [
@@ -26,7 +28,9 @@ import { MessageService } from 'primeng/api';
     ReactiveFormsModule,
     InputTextModule,
     InputTextareaModule,
-    ToastModule
+    ToastModule,
+    BadgeModule,
+    InputSwitchModule,
   ],
   declarations: [ ProductsListComponent ],
   providers: [ ProductService, MessageService ]
