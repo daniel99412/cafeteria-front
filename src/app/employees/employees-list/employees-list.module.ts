@@ -10,10 +10,13 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
 import { BadgeModule } from 'primeng/badge';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { CalendarModule } from 'primeng/calendar';
 import { MessageService } from 'primeng/api';
+import { DropdownModule } from 'primeng/dropdown';
 
 import { EmployeesListComponent } from './employees-list.component';
 import { EmployeesListRoutingModule } from './employees-list-routing.module';
+import { EmployeeService } from '../service/employee.service';
 
 @NgModule({
   imports: [
@@ -30,8 +33,10 @@ import { EmployeesListRoutingModule } from './employees-list-routing.module';
     ToastModule,
     BadgeModule,
     InputSwitchModule,
+    CalendarModule,
+    DropdownModule
   ],
   declarations: [ EmployeesListComponent ],
-  providers: [ MessageService ]
+  providers: [ MessageService, EmployeeService ]
 })
 export class EmployeesListModule { }

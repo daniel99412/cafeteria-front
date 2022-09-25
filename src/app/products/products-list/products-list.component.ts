@@ -10,7 +10,6 @@ import { ProductService } from '../service/product.service';
   styleUrls: ['./products-list.component.scss']
 })
 export class ProductsListComponent implements OnInit {
-  items!: MenuItem[];
   products!: [];
 
   first = 0;
@@ -46,13 +45,13 @@ export class ProductsListComponent implements OnInit {
   next() {
     this.first = this.first + this.rows;
   }
+  
+  reset() {
+    this.first = 0;
+  }
 
   prev() {
     this.first = this.first - this.rows;
-  }
-
-  reset() {
-    this.first = 0;
   }
 
   isLastPage(): boolean {
