@@ -17,6 +17,10 @@ export class EmployeeService {
     save(employee: any) {
         return this.httpClient.post<any>(`${AppSettings.API}/employee/`, employee);
     }
+    
+    login(login: any) {
+        return this.httpClient.post<any>(`${AppSettings.API}/employee/login`, login);
+    }
 
     update(employee: any) {
         return this.httpClient.put<any>(`${AppSettings.API}/employee/${employee.id}`, employee);

@@ -1,4 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { LayoutService } from "./service/app.layout.service";
 
@@ -9,6 +10,8 @@ import { LayoutService } from "./service/app.layout.service";
 export class AppTopBarComponent {
 
     items!: MenuItem[];
+    employeeLogged!: any;
+    viewEmployee = false;
 
     @ViewChild('menubutton') menuButton!: ElementRef;
 
@@ -16,22 +19,28 @@ export class AppTopBarComponent {
 
     @ViewChild('topbarmenu') menu!: ElementRef;
 
-    constructor(public layoutService: LayoutService) {
+    constructor(public layoutService: LayoutService, private router: Router) {
+        this.employeeLogged = JSON.parse(sessionStorage.getItem('employeeLogged')!);
+        if (this.employeeLogged) {
+            this.employeeLogged.birthdate = new Date(this.employeeLogged.birthdate);
+        }
+
         this.items = [{
-            label: 'Chuyin Barajas Jr',
+            label: this.employeeLogged ? this.employeeLogged.name : 'Dummy',
             items: [{
                 label: 'Ver Perfil',
                 icon: 'pi pi-user',
                 command: () => {
-                    console.log('Al Perfil')
+                    this.viewEmployee = true;
                 }
             }, {
                 label: 'Cerrar sesión',
                 icon: 'pi pi-sign-out',
-                routerLink: '/login'
+                command: () => {
+                    this.router.navigate(['/login']);
+                    sessionStorage.clear();
+                }
             }]
         }]
     }
-
-
 }

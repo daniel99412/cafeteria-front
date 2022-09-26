@@ -16,7 +16,8 @@ import { AppLayoutComponent } from "./layout/app.layout.component";
                     { path: 'blocks', loadChildren: () => import('./demo/components/primeblocks/primeblocks.module').then(m => m.PrimeBlocksModule) },
                     { path: 'pages', loadChildren: () => import('./demo/components/pages/pages.module').then(m => m.PagesModule) },
                     { path: 'products', loadChildren: () => import('./products/products.module').then(m => m.ProductsModule) },
-                    { path: 'employees', loadChildren: () => import('./employees/employees.module').then(m => m.EmployeesModule) }
+                    { path: 'employees', loadChildren: () => import('./employees/employees.module').then(m => m.EmployeesModule) },
+                    { path: 'suppliers', loadChildren: () => import('./suppliers/suppliers.module').then(m => m.SuppliersModule) },
                 ],
             },
             { path: 'auth', loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },

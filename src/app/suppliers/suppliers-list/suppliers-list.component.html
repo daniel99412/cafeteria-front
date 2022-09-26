@@ -8,45 +8,44 @@
                     <div class="grid">
                         <div class="col-offset-4 col-4 text-center">
                             <div class="p-mb-3 mb-1">
-                                <button pButton pRipple type="button" icon="pi pi-chevron-left" (click)="prev()" [disabled]="isFirstPage()"
-                                    class="p-button-rounded p-button-text"></button>
+                                <button pButton pRipple type="button" icon="pi pi-chevron-left" (click)="prev()"
+                                    [disabled]="isFirstPage()" class="p-button-rounded p-button-text"></button>
                                 <button pButton pRipple type="button" icon="pi pi-refresh" (click)="reset()"
                                     class="p-button-rounded p-button-text"></button>
-                                <button pButton pRipple type="button" icon="pi pi-chevron-right" (click)="next()" [disabled]="isLastPage()"
-                                    class="p-button-rounded p-button-text"></button>
+                                <button pButton pRipple type="button" icon="pi pi-chevron-right" (click)="next()"
+                                    [disabled]="isLastPage()" class="p-button-rounded p-button-text"></button>
                             </div>
                         </div>
                         <div class="col-4 text-right">
-                            <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-rounded" (click)="addEmployee = true"></button>
+                            <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-rounded"
+                                (click)="addSupplier = true"></button>
                         </div>
                     </div>
 
-                    <p-table [value]="employees" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [(first)]="first"
-                        responsiveLayout="scroll" dataKey="id"
-                        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} entradas" [rowsPerPageOptions]="[10,25,50]">
+                    <p-table [value]="suppliers" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true"
+                        [(first)]="first" responsiveLayout="scroll" dataKey="id"
+                        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} entradas"
+                        [rowsPerPageOptions]="[10,25,50]">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th class="text-center">#</th>
                                 <th class="text-center">Nombre</th>
                                 <th class="text-center">RFC</th>
-                                <th class="text-center">Puesto</th>
-                                <th class="text-center">Estado</th>
                                 <th></th>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-employee>
+                        <ng-template pTemplate="body" let-supplier>
                             <tr>
-                                <td class="text-center">{{ employee.id }}</td>
-                                <td class="text-center">{{ employee.name | titlecase }}</td>
-                                <td class="text-center">{{ employee.rfc | uppercase }}</td>
-                                <td class="text-center">{{ employee.position | titlecase }}</td>
+                                <td class="text-center">{{ supplier.id }}</td>
+                                <td class="text-center">{{ supplier.name | titlecase }}</td>
+                                <td class="text-center">{{ supplier.rfc | uppercase }}</td>
                                 <td class="text-center">
-                                    <p-badge [value]="employee.isActive ? 'ACTIVO' : 'INACTIVO'"
-                                        [severity]="employee.isActive ? 'success' : 'danger'"></p-badge>
-                                </td>
-                                <td class="text-center">
-                                    <button pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success" (click)="openUpdate(employee.id)"></button>
-                                    <button pButton pRipple type="button" icon="pi pi-eye" class="p-button-rounded p-button-info ml-1" (click)="openView(employee.id)"></button>
+                                    <button pButton pRipple type="button" icon="pi pi-pencil"
+                                        class="p-button-rounded p-button-success"
+                                        (click)="openUpdate(supplier.id)"></button>
+                                    <button pButton pRipple type="button" icon="pi pi-eye"
+                                        class="p-button-rounded p-button-info ml-1"
+                                        (click)="openView(supplier.id)"></button>
                                 </td>
                             </tr>
                         </ng-template>
@@ -57,8 +56,8 @@
     </div>
 </div>
 
-<p-sidebar [style]="{width: '28em'}" [(visible)]="addEmployee" position="right" [dismissible]="false" [showCloseIcon]="false"
-    [closeOnEscape]="false" [baseZIndex]="10000">
+<p-sidebar [style]="{width: '28em'}" [(visible)]="addSupplier" position="right" [dismissible]="false"
+    [showCloseIcon]="false" [closeOnEscape]="false" [baseZIndex]="10000">
     <h1 style="font-weight:normal">Agregar</h1>
     <div class="p-fluid">
         <div class="field">
@@ -72,10 +71,6 @@
             <small id="price-help" class="p-invalid" *ngIf="!rfc.valid && rfc.touched">RFC es requerido.</small>
         </div>
         <div class="field">
-            <label for="icon">Fecha de Nacimiento</label>
-            <p-calendar [formControl]="birthdate" dateFormat="dd-mm-yy" [showIcon]="true" inputId="icon"></p-calendar>
-        </div>
-        <div class="field">
             <label for="description">Domicilio</label>
             <textarea name="description" [formControl]="address" pInputTextarea rows="5" cols="30"></textarea>
             <small id="description-help" class="p-invalid" *ngIf="!address.valid && address.touched">Domicilio es
@@ -87,12 +82,6 @@
             <small id="price-help" class="p-invalid" *ngIf="!telephone.valid && telephone.touched">Teléfono es
                 requerido.</small>
         </div>
-        <div class="field">
-            <label for="price">Puesto</label>
-            <!-- <input id="price" type="text" [formControl]="position" pInputText /> -->
-            <p-dropdown [options]="positions" [formControl]="position" [showClear]="true" [virtualScroll]="true" [virtualScrollItemSize]="1"></p-dropdown>
-            <small id="price-help" class="p-invalid" *ngIf="!position.valid && position.touched">Puesto es requerido.</small>
-        </div>
     </div>
     <div class="col-12 p-buttonset">
         <button pButton pRipple label="Guardar" icon="pi pi-check" (click)="save()" [disabled]="!formValid()"></button>
@@ -100,8 +89,8 @@
     </div>
 </p-sidebar>
 
-<p-sidebar [style]="{width: '28em'}" [(visible)]="editEmployee" position="right" [dismissible]="false" [showCloseIcon]="false"
-    [closeOnEscape]="false" [baseZIndex]="10000">
+<p-sidebar [style]="{width: '28em'}" [(visible)]="editSupplier" position="right" [dismissible]="false"
+    [showCloseIcon]="false" [closeOnEscape]="false" [baseZIndex]="10000">
     <h1 style="font-weight:normal">Editar</h1>
     <div class="p-fluid">
         <div class="field">
@@ -119,10 +108,6 @@
             <small id="price-help" class="p-invalid" *ngIf="!rfc.valid && rfc.touched">RFC es requerido.</small>
         </div>
         <div class="field">
-            <label for="icon">Fecha de Nacimiento</label>
-            <p-calendar [formControl]="birthdate" dateFormat="dd-mm-yy" [showIcon]="true" inputId="icon"></p-calendar>
-        </div>
-        <div class="field">
             <label for="description">Domicilio</label>
             <textarea name="description" [formControl]="address" pInputTextarea rows="5" cols="30"></textarea>
             <small id="description-help" class="p-invalid" *ngIf="!address.valid && address.touched">Domicilio es
@@ -131,17 +116,8 @@
         <div class="field">
             <label for="price">Teléfono</label>
             <input id="price" type="text" [formControl]="telephone" pInputText />
-            <small id="price-help" class="p-invalid" *ngIf="!telephone.valid && telephone.touched">Teléfono es requerido.</small>
-        </div>
-        <div class="field">
-            <label for="price">Puesto</label>
-            <!-- <input id="price" type="text" [formControl]="position" pInputText /> -->
-            <p-dropdown [options]="positions" [formControl]="position" [showClear]="true" [virtualScroll]="true" [virtualScrollItemSize]="1"></p-dropdown>
-            <small id="price-help" class="p-invalid" *ngIf="!position.valid && position.touched">Puesto es requerido.</small>
-        </div>
-        <div class="field">
-            <label for="isActive">Activo</label><br>
-            <p-inputSwitch name="isActive" [formControl]="isActive"></p-inputSwitch>
+            <small id="price-help" class="p-invalid" *ngIf="!telephone.valid && telephone.touched">Teléfono es
+                requerido.</small>
         </div>
     </div>
     <div class="col-12 p-buttonset">
@@ -151,9 +127,8 @@
     </div>
 </p-sidebar>
 
-<p-sidebar [style]="{width: '28em'}" [(visible)]="viewEmployee" position="right" [dismissible]="false"
-    [closeOnEscape]="false" [baseZIndex]="10000"
-    (onHide)="onViewHide()">
+<p-sidebar [style]="{width: '28em'}" [(visible)]="viewSupplier" position="right" [dismissible]="false"
+    [closeOnEscape]="false" [baseZIndex]="10000" (onHide)="onViewHide()">
     <h1 style="font-weight:normal">Detalle</h1>
     <div class="p-fluid">
         <div class="field">
@@ -171,10 +146,6 @@
             <small id="price-help" class="p-invalid" *ngIf="!rfc.valid && rfc.touched">RFC es requerido.</small>
         </div>
         <div class="field">
-            <label for="icon">Fecha de Nacimiento</label>
-            <p-calendar [formControl]="birthdate" dateFormat="dd-mm-yy" [showIcon]="true" inputId="icon"></p-calendar>
-        </div>
-        <div class="field">
             <label for="description">Domicilio</label>
             <textarea name="description" [formControl]="address" pInputTextarea rows="5" cols="30"></textarea>
             <small id="description-help" class="p-invalid" *ngIf="!address.valid && address.touched">Domicilio es
@@ -185,18 +156,6 @@
             <input id="price" type="text" [formControl]="telephone" pInputText />
             <small id="price-help" class="p-invalid" *ngIf="!telephone.valid && telephone.touched">Teléfono es
                 requerido.</small>
-        </div>
-        <div class="field">
-            <label for="price">Puesto</label>
-            <!-- <input id="price" type="text" [formControl]="position" pInputText /> -->
-            <p-dropdown [options]="positions" [formControl]="position" [showClear]="true" [virtualScroll]="true"
-                [virtualScrollItemSize]="1"></p-dropdown>
-            <small id="price-help" class="p-invalid" *ngIf="!position.valid && position.touched">Puesto es
-                requerido.</small>
-        </div>
-        <div class="field">
-            <label for="isActive">Activo</label><br>
-            <p-inputSwitch name="isActive" [formControl]="isActive"></p-inputSwitch>
         </div>
     </div>
 </p-sidebar>

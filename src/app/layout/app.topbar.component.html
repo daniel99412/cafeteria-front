@@ -20,3 +20,45 @@
         <p-menu #menu [popup]="true" [model]="items"></p-menu>
     </div>
 </div>
+
+<p-sidebar [style]="{width: '28em'}" [(visible)]="viewEmployee" position="right" [dismissible]="false"
+    [closeOnEscape]="false" [baseZIndex]="10000">
+    <h1 style="font-weight:normal">Detalle</h1>
+    <div class="p-fluid">
+        <div class="field">
+            <label for="id">Código</label>
+            <input *ngIf="employeeLogged" id="id" type="number" [(ngModel)]="employeeLogged.id" pInputText disabled/>
+            <p-skeleton *ngIf="!employeeLogged" height="25px"></p-skeleton>
+        </div>
+        <div class="field">
+            <label for="name">Nombre</label>
+            <input *ngIf="employeeLogged" id="name" type="text" [(ngModel)]="employeeLogged.name" pInputText  disabled/>
+            <p-skeleton *ngIf="!employeeLogged" height="25px"></p-skeleton>
+        </div>
+        <div class="field">
+            <label for="rfc">RFC</label>
+            <input *ngIf="employeeLogged" id="rfc" type="text" [(ngModel)]="employeeLogged.rfc" pInputText  disabled/>
+            <p-skeleton *ngIf="!employeeLogged" height="25px"></p-skeleton>
+        </div>
+        <div class="field">
+            <label for="birthdate">Fecha de Nacimiento</label>
+            <p-calendar *ngIf="employeeLogged" [(ngModel)]="employeeLogged.birthdate" dateFormat="dd-mm-yy" [showIcon]="true" inputId="birthdate" disabled></p-calendar>
+            <p-skeleton *ngIf="!employeeLogged" height="25px"></p-skeleton>
+        </div>
+        <div class="field">
+            <label for="address">Domicilio</label>
+            <textarea *ngIf="employeeLogged" name="address" [(ngModel)]="employeeLogged.address" pInputTextarea rows="5" cols="30" disabled></textarea>
+            <p-skeleton *ngIf="!employeeLogged" height="101px"></p-skeleton>
+        </div>
+        <div class="field">
+            <label for="telephone">Teléfono</label>
+            <input *ngIf="employeeLogged" id="telephone" type="text" [(ngModel)]="employeeLogged.telephone" pInputText  disabled/>
+            <p-skeleton *ngIf="!employeeLogged" height="25px"></p-skeleton>
+        </div>
+        <div class="field">
+            <label for="position">Puesto</label>
+            <input *ngIf="employeeLogged" id="position" type="text" [(ngModel)]="employeeLogged.position" pInputText  disabled/>
+            <p-skeleton *ngIf="!employeeLogged" height="25px"></p-skeleton>
+        </div>
+    </div>
+</p-sidebar>

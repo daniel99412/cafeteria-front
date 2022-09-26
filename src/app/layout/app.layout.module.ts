@@ -18,6 +18,9 @@ import { AppConfigModule } from './config/config.module';
 import { AppSidebarComponent } from "./app.sidebar.component";
 import { AppLayoutComponent } from "./app.layout.component";
 import { MenuModule } from 'primeng/menu';
+import { CalendarModule } from 'primeng/calendar';
+import { SkeletonModule } from 'primeng/skeleton';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 @NgModule({
     declarations: [
@@ -34,6 +37,7 @@ import { MenuModule } from 'primeng/menu';
         HttpClientModule,
         BrowserAnimationsModule,
         InputTextModule,
+        InputTextareaModule,
         SidebarModule,
         BadgeModule,
         RadioButtonModule,
@@ -41,7 +45,9 @@ import { MenuModule } from 'primeng/menu';
         RippleModule,
         RouterModule,
         AppConfigModule,
-        MenuModule
+        MenuModule,
+        CalendarModule,
+        SkeletonModule
     ],
     exports: [AppLayoutComponent]
 })

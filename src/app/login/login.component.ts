@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { tap } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { EmployeeService } from '../employees/service/employee.service';
 
 @Component({
     selector: 'app-login',
@@ -27,7 +31,34 @@ export class LoginComponent {
 
     valCheck: string[] = ['remember'];
 
-    password!: string;
+    employeeCode!: number;
+    rfc!: string;
 
-    constructor(public layoutService: LayoutService) { }
+    constructor(
+        public layoutService: LayoutService,
+        private employeeService: EmployeeService,
+        private messageService: MessageService,
+        private router: Router
+    ) {}
+
+    login() {
+        let login = {
+            'id': this.employeeCode,
+            'rfc': this.rfc
+        }
+
+        this.employeeService.login(login).pipe(
+            tap(resp => {
+                if (resp.status === 404) {
+                    this.messageService.add({ severity: 'warn', summary: resp.message });
+                }
+
+                if (resp.status === 202) {
+                    this.messageService.add({ severity: 'success', summary: '¡Bienvenido!', detail: `Hola, ${resp.employee.name}` });
+                    sessionStorage.setItem('employeeLogged', JSON.stringify(resp.employee));
+                    this.router.navigate(['/products']);
+                }
+            })
+        ).subscribe();
+    }
 }
