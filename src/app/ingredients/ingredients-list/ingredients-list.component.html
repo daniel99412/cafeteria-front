@@ -1,0 +1,101 @@
+<p-toast position="top-right"></p-toast>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h5>Ingredientes</h5>
+            <div class="grid">
+                <div class="col-12">
+                    <div class="grid">
+                        <div class="col-offset-4 col-4 text-center">
+                            <div class="p-mb-3 mb-1">
+                                <button pButton pRipple type="button" icon="pi pi-chevron-left" (click)="prev()"
+                                    [disabled]="isFirstPage()" class="p-button-rounded p-button-text"></button>
+                                <button pButton pRipple type="button" icon="pi pi-refresh" (click)="reset()"
+                                    class="p-button-rounded p-button-text"></button>
+                                <button pButton pRipple type="button" icon="pi pi-chevron-right" (click)="next()"
+                                    [disabled]="isLastPage()" class="p-button-rounded p-button-text"></button>
+                            </div>
+                        </div>
+                        <div class="col-4 text-right">
+                            <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-rounded"
+                                (click)="addIngredient = true"></button>
+                        </div>
+                    </div>
+
+                    <p-table [value]="ingredients" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true"
+                        [(first)]="first" responsiveLayout="scroll" dataKey="id"
+                        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} entradas"
+                        [rowsPerPageOptions]="[10,25,50]">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Nombre</th>
+                                <th class="text-center">Cantidad Disponible</th>
+                                <th></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-ingredient>
+                            <tr>
+                                <td class="text-center">{{ ingredient.id }}</td>
+                                <td class="text-center">{{ ingredient.name | titlecase }}</td>
+                                <td class="text-center">{{ ingredient.amountAvailable }}</td>
+                                <td class="text-center">
+                                    <button pButton pRipple type="button" icon="pi pi-pencil"
+                                        class="p-button-rounded p-button-success"
+                                        (click)="openUpdate(ingredient.id)"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-sidebar [style]="{width: '28em'}" [(visible)]="addIngredient" position="right" [dismissible]="false"
+    [showCloseIcon]="false" [closeOnEscape]="false" [baseZIndex]="10000">
+    <h1 style="font-weight:normal">Agregar</h1>
+    <div class="p-fluid">
+        <div class="field">
+            <label for="name">Nombre</label>
+            <input id="name" type="text" [formControl]="name" pInputText />
+            <small id="name-help" class="p-invalid" *ngIf="!name.valid && name.touched">Nombre es requerido.</small>
+        </div>
+        <div class="field">
+            <label for="price">Cantidad disponible</label>
+            <input id="price" type="number" [formControl]="amountAvailable" pInputText />
+            <small id="price-help" class="p-invalid" *ngIf="!amountAvailable.valid && amountAvailable.touched">Cantidad disponible es requerido.</small>
+        </div>
+    </div>
+    <div class="col-12 p-buttonset">
+        <button pButton pRipple label="Guardar" icon="pi pi-check" (click)="save()" [disabled]="!formValid()"></button>
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" (click)="cancel()" class="p-button-danger"></button>
+    </div>
+</p-sidebar>
+
+<p-sidebar [style]="{width: '28em'}" [(visible)]="editIngredient" position="right" [dismissible]="false"
+    [showCloseIcon]="false" [closeOnEscape]="false" [baseZIndex]="10000">
+    <h1 style="font-weight:normal">Editar</h1>
+    <div class="p-fluid">
+        <div class="field">
+            <label for="id">Código</label>
+            <input id="id" type="number" [formControl]="id" pInputText />
+        </div>
+        <div class="field">
+            <label for="name">Nombre</label>
+            <input id="name" type="text" [formControl]="name" pInputText />
+            <small id="name-help" class="p-invalid" *ngIf="!name.valid && name.touched">Nombre es requerido.</small>
+        </div>
+        <div class="field">
+            <label for="price">Cantidad disponible</label>
+            <input id="price" type="number" [formControl]="amountAvailable" pInputText />
+            <small id="price-help" class="p-invalid" *ngIf="!amountAvailable.valid && amountAvailable.touched">Cantidad disponible es requerido.</small>
+        </div>
+    </div>
+    <div class="col-12 p-buttonset">
+        <button pButton pRipple label="Guardar" icon="pi pi-check" (click)="update()"
+            [disabled]="!formValid()"></button>
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" (click)="cancel()" class="p-button-danger"></button>
+    </div>
+</p-sidebar>
