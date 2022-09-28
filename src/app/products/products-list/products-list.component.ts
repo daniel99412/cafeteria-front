@@ -16,6 +16,7 @@ export class ProductsListComponent implements OnInit {
   rows = 10;
   addProduct!: boolean;
   editProduct!: boolean;
+  viewProduct!: boolean;
   disabled = true;
 
   id = new FormControl({value: null, disabled: true}, [Validators.required]);
@@ -127,6 +128,27 @@ export class ProductsListComponent implements OnInit {
     ).subscribe();
   }
 
+  openView(id: number) {
+    this.productService.findById(id).pipe(
+      tap(resp => {
+        this.id.setValue(resp.id);
+        this.name.setValue(resp.name);
+        this.price.setValue(resp.price);
+        this.amountAvailable.setValue(resp.amountAvailable);
+        this.description.setValue(resp.description);
+        this.isActive.setValue(resp.isActive);
+
+        this.name.disable();
+        this.price.disable();
+        this.amountAvailable.disable();
+        this.description.disable();
+        this.isActive.disable();
+
+        this.viewProduct = true;
+      })
+    ).subscribe()
+  }
+
   cancel() {
     this.editProduct = false;
     this.addProduct = false;
@@ -137,5 +159,22 @@ export class ProductsListComponent implements OnInit {
     this.description.reset(null);
     this.id.reset(null);
     this.isActive.reset(null);
+  }
+
+  onViewHide() {
+    this.id.reset();
+    this.name.reset();
+    this.price.reset();
+    this.amountAvailable.reset();
+    this.description.reset();
+    this.isActive.reset();
+
+    this.name.enable();
+    this.price.enable();
+    this.amountAvailable.enable();
+    this.description.enable();
+    this.isActive.enable();
+
+    this.viewProduct = false;
   }
 }

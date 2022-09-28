@@ -44,7 +44,8 @@
                                     <p-badge [value]="product.isActive ? 'ACTIVO' : 'INACTIVO'" [severity]="product.isActive ? 'success' : 'danger'"></p-badge>
                                 </td>
                                 <td class="text-center">
-                                    <button pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-info" (click)="openUpdate(product.id)"></button>
+                                    <button pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success" (click)="openUpdate(product.id)"></button>
+                                    <button pButton pRipple type="button" icon="pi pi-eye" class="p-button-rounded p-button-info ml-1" (click)="openView(product.id)"></button>
                                 </td>
                             </tr>
                         </ng-template>
@@ -122,5 +123,42 @@
     <div class="col-12 p-buttonset">
         <button pButton pRipple label="Guardar" icon="pi pi-check" (click)="update()" [disabled]="!formValid()"></button>
         <button pButton pRipple label="Cancelar" icon="pi pi-times" (click)="cancel()" class="p-button-danger"></button>
+    </div>
+</p-sidebar>
+
+<p-sidebar [style]="{width: '28em'}" [(visible)]="viewProduct" position="right" [dismissible]="false"
+    [closeOnEscape]="false" [baseZIndex]="10000" (onHide)="onViewHide()">
+    <h1 style="font-weight:normal">Detalle</h1>
+    <div class="p-fluid">
+        <div class="field">
+            <label for="id">Código</label>
+            <input id="id" type="number" [formControl]="id" pInputText />
+        </div>
+        <div class="field">
+            <label for="name">Nombre</label>
+            <input id="name" type="text" [formControl]="name" pInputText />
+            <small id="name-help" class="p-invalid" *ngIf="!name.valid && name.touched">Nombre es requerido.</small>
+        </div>
+        <div class="field">
+            <label for="price">Precio</label>
+            <input id="price" type="number" [formControl]="price" pInputText />
+            <small id="price-help" class="p-invalid" *ngIf="!price.valid && price.touched">Precio es requerido.</small>
+        </div>
+        <div class="field">
+            <label for="price">Cantidad Disponible</label>
+            <input id="price" type="number" [formControl]="amountAvailable" pInputText />
+            <small id="price-help" class="p-invalid" *ngIf="!amountAvailable.valid && amountAvailable.touched">Cantidad
+                disponible es requerido.</small>
+        </div>
+        <div class="field">
+            <label for="description">Descripción</label>
+            <textarea name="description" [formControl]="description" pInputTextarea rows="5" cols="30"></textarea>
+            <small id="description-help" class="p-invalid" *ngIf="!description.valid && description.touched">Descripción es
+                requerido.</small>
+        </div>
+        <div class="field">
+            <label for="isActive">Activo</label><br>
+            <p-inputSwitch name="isActive" [formControl]="isActive"></p-inputSwitch>
+        </div>
     </div>
 </p-sidebar>

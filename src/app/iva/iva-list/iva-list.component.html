@@ -1,1 +1,99 @@
-<p>iva-list works!</p>
+<p-toast position="top-right"></p-toast>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h5>IVA</h5>
+            <div class="grid">
+                <div class="col-12">
+                    <div class="grid">
+                        <div class="col-offset-4 col-4 text-center">
+                            <div class="p-mb-3 mb-1">
+                                <button pButton pRipple type="button" icon="pi pi-chevron-left" (click)="prev()"
+                                    [disabled]="isFirstPage()" class="p-button-rounded p-button-text"></button>
+                                <button pButton pRipple type="button" icon="pi pi-refresh" (click)="reset()"
+                                    class="p-button-rounded p-button-text"></button>
+                                <button pButton pRipple type="button" icon="pi pi-chevron-right" (click)="next()"
+                                    [disabled]="isLastPage()" class="p-button-rounded p-button-text"></button>
+                            </div>
+                        </div>
+                        <div class="col-4 text-right">
+                            <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-rounded"
+                                (click)="addIva = true"></button>
+                        </div>
+                    </div>
+
+                    <p-table [value]="ivas" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true"
+                        [(first)]="first" responsiveLayout="scroll" dataKey="id"
+                        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} entradas"
+                        [rowsPerPageOptions]="[10,25,50]">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">IVA</th>
+                                <th class="text-center">Fecha de inicio</th>
+                                <th></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-iva>
+                            <tr>
+                                <td class="text-center">{{ iva.id }}</td>
+                                <td class="text-center">{{ iva.iva }}</td>
+                                <td class="text-center">{{ displayDate(iva.dateStart) }}</td>
+                                <td class="text-center">
+                                    <button pButton pRipple type="button" icon="pi pi-pencil"
+                                        class="p-button-rounded p-button-success"
+                                        (click)="openUpdate(iva.id)"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-sidebar [style]="{width: '28em'}" [(visible)]="addIva" position="right" [dismissible]="false"
+    [showCloseIcon]="false" [closeOnEscape]="false" [baseZIndex]="10000">
+    <h1 style="font-weight:normal">Agregar</h1>
+    <div class="p-fluid">
+        <div class="field">
+            <label for="iva">IVA</label>
+            <input id="iva" type="number" [formControl]="iva" pInputText />
+            <small id="iva-help" class="p-invalid" *ngIf="!iva.valid && iva.touched">Nombre es requerido.</small>
+        </div>
+        <div class="field">
+            <label for="icon">Fecha de Nacimiento</label>
+            <p-calendar [formControl]="dateStart" dateFormat="dd-mm-yy" [showIcon]="true" inputId="icon"></p-calendar>
+        </div>
+    </div>
+    <div class="col-12 p-buttonset">
+        <button pButton pRipple label="Guardar" icon="pi pi-check" (click)="save()" [disabled]="!formValid()"></button>
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" (click)="cancel()" class="p-button-danger"></button>
+    </div>
+</p-sidebar>
+
+<p-sidebar [style]="{width: '28em'}" [(visible)]="editIva" position="right" [dismissible]="false"
+    [showCloseIcon]="false" [closeOnEscape]="false" [baseZIndex]="10000">
+    <h1 style="font-weight:normal">Editar</h1>
+    <div class="p-fluid">
+        <div class="field">
+            <label for="id">Código</label>
+            <input id="id" type="number" [formControl]="id" pInputText />
+        </div>
+        <div class="field">
+            <label for="iva">IVA</label>
+            <input id="iva" type="number" [formControl]="iva" pInputText />
+            <small id="iva-help" class="p-invalid" *ngIf="!iva.valid && iva.touched">Nombre es requerido.</small>
+        </div>
+        <div class="field">
+            <label for="icon">Fecha de inicio</label>
+            <p-calendar [formControl]="dateStart" dateFormat="dd-mm-yy" [showIcon]="true" inputId="icon"></p-calendar>
+        </div>
+    </div>
+    <div class="col-12 p-buttonset">
+        <button pButton pRipple label="Guardar" icon="pi pi-check" (click)="update()"
+            [disabled]="!formValid()"></button>
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" (click)="cancel()" class="p-button-danger"></button>
+    </div>
+</p-sidebar>
