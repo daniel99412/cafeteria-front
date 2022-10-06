@@ -13,9 +13,9 @@ import * as moment from 'moment';
 export class EmployeesListComponent implements OnInit {
   positions = [
     'Elige una opción',
-    'cajero',
-    'barista',
-    'gerente'
+    'Cajero',
+    'Barista',
+    'Gerente'
   ]
 
   employees!: [];
