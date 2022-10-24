@@ -19,8 +19,9 @@ export class SuppliersListComponent implements OnInit {
   editSupplier!: boolean;
   viewSupplier!: boolean;
   disabled = true;
+  nextSupplier = 0;
 
-  id = new FormControl({value: null, disabled: true}, [Validators.required]);
+  id = new FormControl({value: '', disabled: true}, [Validators.required]);
   name = new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(100)]);
   address = new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(200)]);
   telephone = new FormControl(null, [Validators.required, Validators.minLength(10)]);
@@ -39,6 +40,8 @@ export class SuppliersListComponent implements OnInit {
     this.supplierService.findAll().pipe(
       tap(resp => {
         this.suppliers = resp;
+        this.nextSupplier = resp[resp.length - 1].id + 1;
+        this.id.setValue(this.nextSupplier.toString());
       })
     ).subscribe();
   }
@@ -155,6 +158,7 @@ export class SuppliersListComponent implements OnInit {
 
   cancel() {
     this.id.reset(null);
+    this.id.setValue(this.nextSupplier.toString());
     this.name.reset(null);
     this.rfc.reset(null);
     this.address.reset(null);
@@ -166,6 +170,7 @@ export class SuppliersListComponent implements OnInit {
 
   onViewHide() {
     this.id.reset(null);
+    this.id.setValue(this.nextSupplier.toString());
     this.name.reset(null);
     this.rfc.reset(null);
     this.address.reset(null);

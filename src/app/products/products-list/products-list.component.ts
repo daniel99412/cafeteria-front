@@ -18,8 +18,9 @@ export class ProductsListComponent implements OnInit {
   editProduct!: boolean;
   viewProduct!: boolean;
   disabled = true;
+  nextProduct = 0;
 
-  id = new FormControl({value: null, disabled: true}, [Validators.required]);
+  id = new FormControl({value: '', disabled: true}, [Validators.required]);
   name = new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(45)]);
   price = new FormControl(null, [Validators.min(0), Validators.required]);
   amountAvailable = new FormControl(null, [Validators.min(0), Validators.required]);
@@ -39,6 +40,8 @@ export class ProductsListComponent implements OnInit {
     this.productService.findAll().pipe(
       tap(resp => {
         this.products = resp;
+        this.nextProduct = resp[resp.length-1].id + 1;
+        this.id.setValue(this.nextProduct.toString());
       })
     ).subscribe();
   }
@@ -153,16 +156,18 @@ export class ProductsListComponent implements OnInit {
     this.editProduct = false;
     this.addProduct = false;
 
+    this.id.reset(null);
+    this.id.setValue(this.nextProduct.toString());
     this.name.reset(null);
     this.price.reset(null);
     this.amountAvailable.reset(null);
     this.description.reset(null);
-    this.id.reset(null);
     this.isActive.reset(null);
   }
 
   onViewHide() {
     this.id.reset();
+    this.id.setValue(this.nextProduct.toString());
     this.name.reset();
     this.price.reset();
     this.amountAvailable.reset();

@@ -18,8 +18,9 @@ export class IngredientsListComponent implements OnInit {
   addIngredient!: boolean;
   editIngredient!: boolean;
   disabled = true;
+  nextIngredient = 0;
 
-  id = new FormControl({value: null, disabled: true}, [Validators.required]);
+  id = new FormControl({value: '', disabled: true}, [Validators.required]);
   name = new FormControl(null, [Validators.required, Validators.minLength(3)]);
   amountAvailable = new FormControl(null, [Validators.required, Validators.min(0)]);
 
@@ -35,7 +36,9 @@ export class IngredientsListComponent implements OnInit {
   loadData() {
     this.ingredientService.findAll().pipe(
       tap(resp => {
-        this.ingredients = resp
+        this.ingredients = resp;
+        this.nextIngredient = resp[resp.length-1].id + 1;
+        this.id.setValue(this.nextIngredient.toString());
       })
     ).subscribe();
   }
@@ -117,6 +120,7 @@ export class IngredientsListComponent implements OnInit {
 
   cancel() {
     this.id.reset(null);
+    this.id.setValue(this.nextIngredient.toString());
     this.name.reset(null);
     this.amountAvailable.reset(null);
 

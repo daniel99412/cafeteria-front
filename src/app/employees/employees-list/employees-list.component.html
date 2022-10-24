@@ -62,6 +62,10 @@
     <h1 style="font-weight:normal">Agregar</h1>
     <div class="p-fluid">
         <div class="field">
+            <label for="id">Código</label>
+            <input id="id" type="number" [formControl]="id" pInputText />
+        </div>
+        <div class="field">
             <label for="name">Nombre</label>
             <input id="name" type="text" [formControl]="name" pInputText />
             <small id="name-help" class="p-invalid" *ngIf="!name.valid && name.touched">Nombre es requerido.</small>

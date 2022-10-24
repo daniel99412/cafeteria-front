@@ -40,9 +40,6 @@
                                 <td class="text-center">{{ iva.iva }} %</td>
                                 <td class="text-center">{{ displayDate(iva.dateStart) }}</td>
                                 <td class="text-center">
-                                    <button pButton pRipple type="button" icon="pi pi-pencil"
-                                        class="p-button-rounded p-button-success"
-                                        (click)="openUpdate(iva.id)"></button>
                                 </td>
                             </tr>
                         </ng-template>
@@ -57,6 +54,10 @@
     [showCloseIcon]="false" [closeOnEscape]="false" [baseZIndex]="10000">
     <h1 style="font-weight:normal">Agregar</h1>
     <div class="p-fluid">
+        <div class="field">
+            <label for="id">Código</label>
+            <input id="id" type="number" [formControl]="id" pInputText />
+        </div>
         <div class="field">
             <label for="iva">IVA</label>
             <input id="iva" type="number" [formControl]="iva" pInputText />

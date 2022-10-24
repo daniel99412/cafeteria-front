@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/api';
 import { tap } from 'rxjs';
 import { EmployeeService } from '../service/employee.service';
 import * as moment from 'moment';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-employees-list',
@@ -26,8 +27,9 @@ export class EmployeesListComponent implements OnInit {
   editEmployee!: boolean;
   viewEmployee!: boolean;
   disabled = true;
+  nextEmployee = 0;
 
-  id = new FormControl({value: null, disabled: true}, [Validators.required]);
+  id = new FormControl({value: '', disabled: true}, [Validators.required]);
   name = new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(100)]);
   rfc = new FormControl(null, [Validators.required, Validators.maxLength(13)]);
   birthdate = new FormControl(new Date(), [Validators.required]);
@@ -49,6 +51,8 @@ export class EmployeesListComponent implements OnInit {
     this.employeeService.findAll().pipe(
       tap(resp => {
         this.employees = resp;
+        this.nextEmployee = resp[resp.length - 1].id + 1;
+        this.id.setValue(this.nextEmployee.toString());
       })
     ).subscribe();
   }
@@ -171,6 +175,7 @@ export class EmployeesListComponent implements OnInit {
 
   cancel() {
     this.id.reset(null);
+    this.id.setValue(this.nextEmployee.toString());
     this.name.reset(null);
     this.rfc.reset(null);
     this.birthdate.reset(null);
@@ -185,6 +190,7 @@ export class EmployeesListComponent implements OnInit {
 
   onViewHide() {
     this.id.reset(null);
+    this.id.setValue(this.nextEmployee.toString());
     this.name.reset(null);
     this.rfc.reset(null);
     this.birthdate.reset(null);

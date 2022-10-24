@@ -19,8 +19,9 @@ export class IvaListComponent implements OnInit {
   addIva!: boolean;
   editIva!: boolean;
   disabled = true;
+  nextIva = 0;
 
-  id = new FormControl({value: null, disabled: true}, [Validators.required]);
+  id = new FormControl({value: '', disabled: true}, [Validators.required]);
   iva = new FormControl(null, [Validators.required, Validators.min(0)]);
   dateStart = new FormControl(new Date(), [Validators.required]);
 
@@ -37,6 +38,8 @@ export class IvaListComponent implements OnInit {
     this.ivaService.findAll().pipe(
       tap(resp => {
         this.ivas = resp;
+        this.nextIva = resp[resp.length-1].id + 1;
+        this.id.setValue(this.nextIva.toString());
       })
     ).subscribe();
   }
@@ -120,6 +123,7 @@ export class IvaListComponent implements OnInit {
 
   cancel() {
     this.id.reset(null);
+    this.id.setValue(this.nextIva.toString());
     this.iva.reset(null);
     this.dateStart.reset(null);
 
