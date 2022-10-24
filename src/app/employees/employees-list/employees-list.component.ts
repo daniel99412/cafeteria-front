@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { tap } from 'rxjs';
 import { EmployeeService } from '../service/employee.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-employees-list',
@@ -12,11 +13,24 @@ import * as _ from 'lodash';
   styleUrls: ['./employees-list.component.scss']
 })
 export class EmployeesListComponent implements OnInit {
+  @ViewChild('employeesDt') employeDt: Table | undefined;
+
   positions = [
     'Elige una opción',
     'Cajero',
     'Barista',
     'Gerente'
+  ]
+
+  positionsFilter = [
+    { label: 'Cajero', value: 'Cajero' },
+    { label: 'Barista', value: 'Barista' },
+    { label: 'Gerente', value: 'Gerente' }
+  ]
+
+  statuses = [
+    {label: 'ACTIVO', value: true},
+    {label: 'INACTIVO', value: false}
   ]
 
   employees!: [];
