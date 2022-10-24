@@ -12,6 +12,11 @@ import { ProductService } from '../service/product.service';
 export class ProductsListComponent implements OnInit {
   products!: [];
 
+  statuses = [
+    { label: 'ACTIVO', value: true },
+    { label: 'INACTIVO', value: false }
+  ]
+
   first = 0;
   rows = 10;
   addProduct!: boolean;

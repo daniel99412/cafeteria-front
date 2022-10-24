@@ -33,6 +33,32 @@
                                 <th class="text-center">Estado</th>
                                 <th></th>
                             </tr>
+                            <tr>
+                                <th>
+                                    <p-columnFilter type="text" field="id"></p-columnFilter>
+                                </th>
+                                <th>
+                                    <p-columnFilter type="text" field="name"></p-columnFilter>
+                                </th>
+                                <th>
+                                    <p-columnFilter type="text" field="price"></p-columnFilter>
+                                </th>
+                                <th>
+                                    <p-columnFilter type="text" field="amountAvailable"></p-columnFilter>
+                                </th>
+                                <th>
+                                    <p-columnFilter field="isActive" matchMode="equals" [showMenu]="false">
+                                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                            <p-dropdown [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)" placeholder="Elige una opción" [showClear]="true">
+                                                <ng-template let-option pTemplate="item">
+                                                    <p-badge [value]="option.label" [severity]="option.value ? 'success' : 'danger'"></p-badge>
+                                                </ng-template>
+                                            </p-dropdown>
+                                        </ng-template>
+                                    </p-columnFilter>
+                                </th>
+                                <th></th>
+                            </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-product>
                             <tr>

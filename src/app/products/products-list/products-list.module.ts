@@ -11,6 +11,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { BadgeModule } from 'primeng/badge';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { DropdownModule } from 'primeng/dropdown';
 
 import { ProductsListComponent } from './products-list.component';
 import { ProductsListRoutingModule } from './products-list-routing.module';
@@ -31,6 +32,7 @@ import { ProductService } from '../service/product.service';
     ToastModule,
     BadgeModule,
     InputSwitchModule,
+    DropdownModule
   ],
   declarations: [ ProductsListComponent ],
   providers: [ ProductService, MessageService ]
