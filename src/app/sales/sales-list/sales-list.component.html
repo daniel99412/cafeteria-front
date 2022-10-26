@@ -1,0 +1,111 @@
+<p-toast position="top-right"></p-toast>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h5>Ventas</h5>
+            <div class="grid">
+                <div class="col-12">
+                    <div class="grid">
+                        <div class="col-offset-4 col-4 text-center">
+                            <!-- <div class="p-mb-3 mb-1">
+                                <button pButton pRipple type="button" icon="pi pi-chevron-left" (click)="prev()"
+                                    [disabled]="isFirstPage()" class="p-button-rounded p-button-text"></button>
+                                <button pButton pRipple type="button" icon="pi pi-refresh" (click)="reset()"
+                                    class="p-button-rounded p-button-text"></button>
+                                <button pButton pRipple type="button" icon="pi pi-chevron-right" (click)="next()"
+                                    [disabled]="isLastPage()" class="p-button-rounded p-button-text"></button>
+                            </div> -->
+                        </div>
+                        <div class="col-4 text-right">
+                            <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-rounded"
+                                routerLink="/sales/add"></button>
+                        </div>
+                    </div>
+
+                    <!-- <p-table #employeesDt [value]="employees" [paginator]="true" [rows]="rows"
+                        [showCurrentPageReport]="true" [(first)]="first" responsiveLayout="scroll" dataKey="id"
+                        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} entradas"
+                        [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['id','name','rfc','position']">
+                        <ng-template pTemplate="caption">
+                            <div class="flex">
+                                <span class="p-input-icon-left ml-auto">
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Buscar">
+                                </span>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Nombre</th>
+                                <th class="text-center">RFC</th>
+                                <th class="text-center">Puesto</th>
+                                <th class="text-center">Estado</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <p-columnFilter type="text" field="id"></p-columnFilter>
+                                </th>
+                                <th>
+                                    <p-columnFilter type="text" field="name"></p-columnFilter>
+                                </th>
+                                <th>
+                                    <p-columnFilter type="text" field="rfc"></p-columnFilter>
+                                </th>
+                                <th>
+                                    <p-columnFilter field="position" matchMode="equals" [showMenu]="false">
+                                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                            <p-dropdown [ngModel]="value" [options]="positionsFilter"
+                                                (onChange)="filter($event.value)" placeholder="Elige una opción"
+                                                [showClear]="true">
+                                                <ng-template let-option pTemplate="item">
+                                                    <span>{{option.label}}</span>
+                                                </ng-template>
+                                            </p-dropdown>
+                                        </ng-template>
+                                    </p-columnFilter>
+                                </th>
+                                <th>
+                                    <p-columnFilter field="isActive" matchMode="equals" [showMenu]="false">
+                                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                            <p-dropdown [ngModel]="value" [options]="statuses"
+                                                (onChange)="filter($event.value)" placeholder="Elige una opción"
+                                                [showClear]="true">
+                                                <ng-template let-option pTemplate="item">
+                                                    <p-badge [value]="option.label"
+                                                        [severity]="option.value ? 'success' : 'danger'"></p-badge>
+                                                </ng-template>
+                                            </p-dropdown>
+                                        </ng-template>
+                                    </p-columnFilter>
+                                </th>
+                                <th></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-employee>
+                            <tr>
+                                <td class="text-center">{{ employee.id }}</td>
+                                <td class="text-center">{{ employee.name | titlecase }}</td>
+                                <td class="text-center">{{ employee.rfc | uppercase }}</td>
+                                <td class="text-center">{{ employee.position | titlecase }}</td>
+                                <td class="text-center">
+                                    <p-badge [value]="employee.isActive ? 'ACTIVO' : 'INACTIVO'"
+                                        [severity]="employee.isActive ? 'success' : 'danger'"></p-badge>
+                                </td>
+                                <td class="text-center">
+                                    <button pButton pRipple type="button" icon="pi pi-pencil"
+                                        class="p-button-rounded p-button-success"
+                                        (click)="openUpdate(employee.id)"></button>
+                                    <button pButton pRipple type="button" icon="pi pi-eye"
+                                        class="p-button-rounded p-button-info ml-1"
+                                        (click)="openView(employee.id)"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

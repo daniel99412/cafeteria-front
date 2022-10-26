@@ -1,0 +1,108 @@
+<p-toast position="top-right"></p-toast>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h5>Agregar Venta</h5>
+            <div class="grid">
+                <div class="col-12">
+                    <div class="grid align-items-center">
+                        <div class="col-8">
+                            <div class="grid">
+                                <div class="p-fluid col-4">
+                                    <div class="field">
+                                        <label for="id"># Venta</label>
+                                        <input id="id" type="number" [formControl]="saleIdFc" pInputText>
+                                    </div>
+                                </div>
+                                <div class="p-fluid col-4">
+                                    <div class="field">
+                                        <label for="employeeName">Empleado</label>
+                                        <input id="employeeName" type="text" [formControl]="saleEmplyeeNameFc" pInputText>
+                                    </div>
+                                </div>
+                                <div class="p-fluid col-4">
+                                    <div class="field">
+                                        <label for="date">Fecha</label>
+                                        <p-calendar [formControl]="saleDateFc" dateFormat="d mm yy" [showTime]="true" [showIcon]="true" inputId="icon">
+                                        </p-calendar>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 text-right">
+                            <button pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-danger"
+                                routerLink="/sales/list"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="grid align-items-center">
+                <div class="p-fluid col-4">
+                    <div class="field">
+                        <label for="productList">Buscar producto</label>
+                        <p-autoComplete id="productList" [formControl]="chosenProduct" [suggestions]="filteredProducts" (completeMethod)="filterProducts($event)" field="name" [dropdown]="true">
+                            <ng-template let-product pTemplate="item">
+                                <div>{{product.name | titlecase }}</div>
+                            </ng-template>
+                        </p-autoComplete>
+                    </div>
+                </div>
+                <div class="p-fluid col-3">
+                    <div class="field">
+                        <label for="price">Precio</label>
+                        <input id="price" type="number" [formControl]="chosenProductPrice" pInputText>
+                    </div>
+                </div>
+                <div class="p-fluid col-4">
+                    <div class="field">
+                        <label for="price">Cantidad</label>
+                        <p-inputNumber [formControl]="chosenProductAmount" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1"
+                        decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"></p-inputNumber>
+                    </div>
+                </div>
+                <div class="col-1 text-right">
+                    <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-rounded p-button-success"
+                        (click)="addProductDetail()"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <p-table [value]="productsDetail" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-center">Descripción</th>
+                        <th class="text-right">Precio Unitario</th>
+                        <th class="text-left">Importe</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-pDetail>
+                    <tr>
+                        <th class="text-center">{{pDetail.amount}}</th>
+                        <th class="text-center">{{pDetail.product.name}}</th>
+                        <th class="text-right">$ {{pDetail.price | number: '1.2'}}</th>
+                        <th class="text-left">$ {{pDetail.amount * pDetail.price | number: '1.2'}}</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <tr>
+                        <td colspan="3" class="text-right">Subtotal</td>
+                        <td class="text-left">$ {{ calculateSubtotal() | number: '1.2' }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-right">IVA</td>
+                        <td class="text-left">$ {{ calculateIva() | number: '1.2'}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-right">Total</td>
+                        <td class="text-left">$ {{ calculateTotal() | number: '1.2'}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
