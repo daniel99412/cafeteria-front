@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { map, switchMap } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs';
 import { IvaService } from 'src/app/iva/services/iva.service';
 import { ProductService } from 'src/app/products/service/product.service';
 import * as moment from 'moment';
+import * as _ from 'lodash';
+import { SaleService } from '../service/sale.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 export class Sale {
   id?: number;
   employee?: any;
-  date?: Date;
+  date?: string;
 }
 
 export class ProductDetail {
@@ -39,31 +42,34 @@ export class SalesAddComponent implements OnInit {
   chosenProduct = new FormControl(null, [Validators.required]);
   chosenProductAmountAvailable = 0;
   chosenProductPrice = new FormControl({value: null, disabled: true}, [Validators.required]);
-  chosenProductAmount = new FormControl('', [Validators.required]);
+  chosenProductAmount = new FormControl('', [Validators.required, Validators.min(1)]);
 
   constructor(
-    private productService: ProductService,
+    private route: ActivatedRoute,
+    private router: Router,
     private messageService: MessageService,
+    private saleService: SaleService,
+    private productService: ProductService,
     private ivaService: IvaService
   ) { }
 
   ngOnInit(): void {
     if (sessionStorage.getItem('employeeLogged')) {
-      this.sale.id = 1;
+      this.sale.id = +this.route.snapshot.paramMap.get('id')!;
       this.sale.employee = JSON.parse(sessionStorage.getItem('employeeLogged')!);
-      this.sale.date = this.saleDateFc.value!;
+      this.sale.date = moment(this.saleDateFc.value!).format('YYYY-MM-DD HH:mm:SS');
 
       this.saleIdFc.setValue(this.sale.id.toString());
       this.saleEmplyeeNameFc.setValue(this.sale.employee.name);
     }
 
     this.productService.findAll().pipe(
+      
       switchMap(products => {
         this.products = products.filter((p: any) => p.isActive);
         return this.ivaService.findAll();
       }),
       map(ivas => {
-        console.log(ivas);
         this.ivas = ivas;
       })
     ).subscribe();
@@ -98,17 +104,22 @@ export class SalesAddComponent implements OnInit {
 
   addProductDetail() {
     const newPd = new ProductDetail();
-    newPd.idSell = +this.saleIdFc.value!;
     newPd.product = this.chosenProduct.value!;
     newPd.amount = +this.chosenProductAmount.value!;
     newPd.price = +this.chosenProductPrice.value!;
 
-    this.productsDetail.push(newPd);
-    
+    let already = this.findProductDetailIndex(newPd);
+
+    if (already !== -1) {
+      this.productsDetail[already].amount = this.productsDetail[already].amount! + newPd.amount;
+    } else {
+      this.productsDetail.push(newPd);
+    }
+
     this.chosenProduct.reset();
     this.chosenProductAmountAvailable = 0;
     this.chosenProductPrice.reset();
-    this.chosenProductAmount.reset();
+    this.chosenProductAmount.reset('');
   }
 
   calculateSubtotal(): number {
@@ -143,5 +154,41 @@ export class SalesAddComponent implements OnInit {
 
   calculateTotal(): number {
     return this.calculateSubtotal() + this.calculateIva();
+  }
+
+  findProductDetailIndex(productAdded: ProductDetail): number {
+    let p = _.findIndex(this.productsDetail, function(o) {
+      return o.product.id === productAdded.product.id;
+    });
+
+    return p;
+  }
+
+  removePd(pd: ProductDetail) {
+    this.productsDetail = _.filter(this.productsDetail, function(o) {
+      return o.product.id !== pd.product.id;
+    });
+  }
+
+  saleIsValid(): boolean {
+    if (this.productsDetail.length !== 0) {
+      return false;
+    }
+    return true;
+  }
+
+  save() {
+    const saleToSend = {
+      'sale': this.sale,
+      'detailsSale': this.productsDetail
+    }
+
+    this.saleService.save(saleToSend).pipe(
+      tap(resp => {
+        localStorage.setItem('message', JSON.stringify(resp));
+        
+        this.router.navigate(['/sales/list']);
+      })
+    ).subscribe();
   }
 }

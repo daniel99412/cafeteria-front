@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SalesAddComponent } from './sales-add.component';
-import { SalesAddRoutingModule } from './sales-add-routing.module';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { SidebarModule } from 'primeng/sidebar';
@@ -15,10 +13,14 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { MessageService } from 'primeng/api';
-import { ProductService } from 'src/app/products/service/product.service';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { InputNumberModule } from 'primeng/inputnumber';
+
+import { SalesAddRoutingModule } from './sales-add-routing.module';
+import { SalesAddComponent } from './sales-add.component';
 import { IvaService } from 'src/app/iva/services/iva.service';
+import { SaleService } from '../service/sale.service';
+import { ProductService } from 'src/app/products/service/product.service';
 
 @NgModule({
   imports: [
@@ -41,6 +43,6 @@ import { IvaService } from 'src/app/iva/services/iva.service';
     InputNumberModule
   ],
   declarations: [ SalesAddComponent ],
-  providers: [ MessageService, ProductService, IvaService ]
+  providers: [ MessageService, SaleService, ProductService, IvaService ]
 })
 export class SalesAddModule { }

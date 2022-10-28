@@ -8,7 +8,7 @@ import { RouterModule } from '@angular/router';
   imports: [
     RouterModule.forChild([
       { path: 'list', loadChildren: () => import('./sales-list/sales-list.module').then(m => m.SalesListModule) },
-      { path: 'add', loadChildren: () => import('./sales-add/sales-add.module').then(m => m.SalesAddModule) },
+      { path: 'add/:id', loadChildren: () => import('./sales-add/sales-add.module').then(m => m.SalesAddModule) },
       { path: '**', redirectTo: 'list' }
     ])
   ],

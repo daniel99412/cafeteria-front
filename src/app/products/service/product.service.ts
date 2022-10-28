@@ -14,7 +14,7 @@ export class ProductService {
         return this.httpClient.get<any>(`${AppSettings.API}/product/${id}`);
     }
 
-    save(product: any) {
+    save(product: any) {
         return this.httpClient.post<any>(`${AppSettings.API}/product/`, product);
     }
 

@@ -17,6 +17,8 @@ import { DropdownModule } from 'primeng/dropdown';
 
 import { SalesListComponent } from './sales-list.component';
 import { SalesListRoutingModule } from './sales-list-routing.module';
+import { SaleService } from '../service/sale.service';
+import { IvaService } from 'src/app/iva/services/iva.service';
 
 @NgModule({
   imports: [
@@ -37,6 +39,6 @@ import { SalesListRoutingModule } from './sales-list-routing.module';
     DropdownModule
   ],
   declarations: [ SalesListComponent ],
-  providers: [ MessageService ]
+  providers: [ MessageService, SaleService, IvaService ]
 })
 export class SalesListModule { }
