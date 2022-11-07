@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
     RouterModule.forChild([
       { path: 'list', loadChildren: () => import('./sales-list/sales-list.module').then(m => m.SalesListModule) },
       { path: 'add/:id', loadChildren: () => import('./sales-add/sales-add.module').then(m => m.SalesAddModule) },
+      { path: 'view/:id', loadChildren: () => import('./sales-view/sales-view.module').then(m => m.SalesViewModule) },
       { path: '**', redirectTo: 'list' }
     ])
   ],

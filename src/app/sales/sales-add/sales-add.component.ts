@@ -64,7 +64,6 @@ export class SalesAddComponent implements OnInit {
     }
 
     this.productService.findAll().pipe(
-      
       switchMap(products => {
         this.products = products.filter((p: any) => p.isActive);
         return this.ivaService.findAll();

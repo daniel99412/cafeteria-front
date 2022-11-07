@@ -42,45 +42,17 @@
                                 <th class="text-center">Total</th>
                                 <th></th>
                             </tr>
-                            <!-- <tr>
+                            <tr>
                                 <th>
                                     <p-columnFilter type="text" field="id"></p-columnFilter>
                                 </th>
                                 <th>
-                                    <p-columnFilter type="text" field="name"></p-columnFilter>
-                                </th>
-                                <th>
-                                    <p-columnFilter type="text" field="rfc"></p-columnFilter>
-                                </th>
-                                <th>
-                                    <p-columnFilter field="position" matchMode="equals" [showMenu]="false">
-                                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                                            <p-dropdown [ngModel]="value" [options]="positionsFilter"
-                                                (onChange)="filter($event.value)" placeholder="Elige una opción"
-                                                [showClear]="true">
-                                                <ng-template let-option pTemplate="item">
-                                                    <span>{{option.label}}</span>
-                                                </ng-template>
-                                            </p-dropdown>
-                                        </ng-template>
-                                    </p-columnFilter>
-                                </th>
-                                <th>
-                                    <p-columnFilter field="isActive" matchMode="equals" [showMenu]="false">
-                                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                                            <p-dropdown [ngModel]="value" [options]="statuses"
-                                                (onChange)="filter($event.value)" placeholder="Elige una opción"
-                                                [showClear]="true">
-                                                <ng-template let-option pTemplate="item">
-                                                    <p-badge [value]="option.label"
-                                                        [severity]="option.value ? 'success' : 'danger'"></p-badge>
-                                                </ng-template>
-                                            </p-dropdown>
-                                        </ng-template>
-                                    </p-columnFilter>
+                                    <p-columnFilter type="text" field="employee.name"></p-columnFilter>
                                 </th>
                                 <th></th>
-                            </tr> -->
+                                <th></th>
+                                <th></th>
+                            </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-sale>
                             <tr>
@@ -90,7 +62,7 @@
                                 <td class="text-center">$ {{ calculateTotal(sale) }}</td>
                                 <td class="text-center">
                                     <button pButton pRipple type="button" icon="pi pi-eye"
-                                        class="p-button-rounded p-button-info ml-1"></button>
+                                        class="p-button-rounded p-button-info ml-1" [routerLink]="['/sales/view', sale.id]"></button>
                                 </td>
                             </tr>
                         </ng-template>

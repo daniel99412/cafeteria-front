@@ -30,7 +30,6 @@ export class SalesListComponent implements OnInit {
     this.saleService.findAll().pipe(
       switchMap(sales => {
         this.sales = sales;
-        console.log(this.sales);
         if (sales.length > 0) {
           this.nextSaleId = sales[sales.length - 1].id + 1;
         }
