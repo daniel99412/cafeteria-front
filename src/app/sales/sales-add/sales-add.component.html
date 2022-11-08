@@ -17,23 +17,26 @@
                                 <div class="p-fluid col-8">
                                     <div class="field">
                                         <label for="employeeName">Empleado</label>
-                                        <input id="employeeName" type="text" [formControl]="saleEmplyeeNameFc" pInputText>
+                                        <input id="employeeName" type="text" [formControl]="saleEmplyeeNameFc"
+                                            pInputText>
                                     </div>
                                 </div>
                                 <div class="p-fluid col-2">
                                     <div class="field">
                                         <label for="date">Fecha</label>
-                                        <p-calendar [formControl]="saleDateFc" dateFormat="d mm yy" [showTime]="true" [showIcon]="true" inputId="icon">
+                                        <p-calendar [formControl]="saleDateFc" dateFormat="d mm yy" [showTime]="true"
+                                            [showIcon]="true" inputId="icon">
                                         </p-calendar>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-1 text-right">
-                            <button pButton pRipple type="button" icon="pi pi-save" class="p-button-rounded p-button-success mr-2"
-                                (click)="save()" [disabled]="saleIsValid()"></button>
-                            <button pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-danger"
-                                routerLink="/sales/list"></button>
+                            <button pButton pRipple type="button" icon="pi pi-save"
+                                class="p-button-rounded p-button-success mr-2" (click)="save()"
+                                [disabled]="saleIsValid()"></button>
+                            <button pButton pRipple type="button" icon="pi pi-times"
+                                class="p-button-rounded p-button-danger" routerLink="/sales/list"></button>
                         </div>
                     </div>
                 </div>
@@ -42,7 +45,8 @@
                 <div class="p-fluid col-6">
                     <div class="field">
                         <label for="productList">Buscar producto</label>
-                        <p-autoComplete id="productList" [formControl]="chosenProduct" [suggestions]="filteredProducts" (completeMethod)="filterProducts($event)" field="name" [dropdown]="true">
+                        <p-autoComplete id="productList" [formControl]="chosenProduct" [suggestions]="filteredProducts"
+                            (completeMethod)="filterProducts($event)" field="name" [dropdown]="true">
                             <ng-template let-product pTemplate="item">
                                 <div>{{product.name | titlecase }}</div>
                             </ng-template>
@@ -58,13 +62,17 @@
                 <div class="p-fluid col-2">
                     <div class="field">
                         <label for="price">Cantidad</label>
-                        <p-inputNumber [formControl]="chosenProductAmount" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1"
-                        decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [disabled]="!chosenProduct.valid"></p-inputNumber>
+                        <p-inputNumber [formControl]="chosenProductAmount" [showButtons]="true"
+                            buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1"
+                            decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success"
+                            incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
+                            [disabled]="!chosenProduct.valid"></p-inputNumber>
                     </div>
                 </div>
                 <div class="col-1 text-right">
                     <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-rounded p-button-success"
-                        (click)="addProductDetail()" [disabled]="!chosenProduct.valid && !chosenProductAmount.valid"></button>
+                        (click)="addProductDetail()"
+                        [disabled]="!chosenProduct.valid && !chosenProductAmount.valid"></button>
                 </div>
             </div>
         </div>
@@ -90,7 +98,8 @@
                         <th class="text-center">$ {{pDetail.price | number: '1.2'}}</th>
                         <th class="text-center">$ {{pDetail.amount * pDetail.price | number: '1.2'}}</th>
                         <th> <button pButton pRipple type="button" icon="pi pi-trash"
-                            class="p-button-rounded p-button-danger p-button-text" (click)="removePd(pDetail)"></button> </th>
+                                class="p-button-rounded p-button-danger p-button-text"
+                                (click)="removeProductDetail(pDetail)"></button> </th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="footer">

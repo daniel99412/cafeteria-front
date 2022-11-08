@@ -26,14 +26,6 @@
                         [showCurrentPageReport]="true" [(first)]="first" responsiveLayout="scroll" dataKey="id"
                         currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} entradas"
                         [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['id','name','rfc','position']">
-                        <ng-template pTemplate="caption">
-                            <div class="flex">
-                                <!-- <span class="p-input-icon-left ml-auto">
-                                    <i class="pi pi-search"></i>
-                                    <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Buscar">
-                                </span> -->
-                            </div>
-                        </ng-template>
                         <ng-template pTemplate="header">
                             <tr>
                                 <th class="text-center"># Venta</th>

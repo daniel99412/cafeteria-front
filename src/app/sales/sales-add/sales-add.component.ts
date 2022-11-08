@@ -29,19 +29,19 @@ export class ProductDetail {
 })
 export class SalesAddComponent implements OnInit {
 
-  products = [];
-  filteredProducts!: any[];
-  ivas = [];
   sale: Sale = new Sale();
+  products: any[] = [];
+  ivas = [];
+  filteredProducts!: any[];
   productsDetail: ProductDetail[] = [];
 
-  saleIdFc = new FormControl({value: '', disabled: true});
+  saleIdFc = new FormControl({ value: '', disabled: true });
   saleEmplyeeNameFc = new FormControl({ value: '', disabled: true });
   saleDateFc = new FormControl({ value: new Date(), disabled: true });
 
   chosenProduct = new FormControl(null, [Validators.required]);
   chosenProductAmountAvailable = 0;
-  chosenProductPrice = new FormControl({value: null, disabled: true}, [Validators.required]);
+  chosenProductPrice = new FormControl({ value: null, disabled: true }, [Validators.required]);
   chosenProductAmount = new FormControl('', [Validators.required, Validators.min(1)]);
 
   constructor(
@@ -65,7 +65,7 @@ export class SalesAddComponent implements OnInit {
 
     this.productService.findAll().pipe(
       switchMap(products => {
-        this.products = products.filter((p: any) => p.isActive);
+        this.products = this.setUpProducts(products);
         return this.ivaService.findAll();
       }),
       map(ivas => {
@@ -82,10 +82,14 @@ export class SalesAddComponent implements OnInit {
 
     this.chosenProductAmount.valueChanges.subscribe((amount: any) => {
       if (amount > this.chosenProductAmountAvailable) {
-        this.messageService.add({ severity: 'error', summary: '¡Error!', detail: 'No existe suficiente producto para proveer lo demandado'});
+        this.messageService.add({ severity: 'error', summary: '¡Error!', detail: 'No existe suficiente producto para proveer lo demandado' });
         this.chosenProductAmount.setValue(this.chosenProductAmountAvailable.toString());
       }
     });
+  }
+
+  setUpProducts(products: any[]) {
+    return products.filter((p: any) => p.isActive && p.amountAvailable !== 0);
   }
 
   filterProducts(event: any) {
@@ -106,19 +110,49 @@ export class SalesAddComponent implements OnInit {
     newPd.product = this.chosenProduct.value!;
     newPd.amount = +this.chosenProductAmount.value!;
     newPd.price = +this.chosenProductPrice.value!;
+    const productIndx = this.findProductIndex(newPd.product);
+    this.products[productIndx].amountAvailable = this.products[productIndx].amountAvailable - newPd.amount;
 
     let already = this.findProductDetailIndex(newPd);
 
-    if (already !== -1) {
-      this.productsDetail[already].amount = this.productsDetail[already].amount! + newPd.amount;
-    } else {
-      this.productsDetail.push(newPd);
+    switch (already) {
+      case -1:
+        this.productsDetail.push(newPd);
+        break;
+      default:
+        this.productsDetail[already].amount = this.productsDetail[already].amount! + newPd.amount;
+        break;
     }
+
+    this.products = this.setUpProducts(this.products);
 
     this.chosenProduct.reset();
     this.chosenProductAmountAvailable = 0;
     this.chosenProductPrice.reset();
     this.chosenProductAmount.reset('');
+  }
+
+  removeProductDetail(pd: ProductDetail) {
+    const productIndx = this.findProductIndex(pd.product);
+    this.products[productIndx].amountAvailable = this.products[productIndx].amountAvailable + pd.amount;
+
+    this.products = this.setUpProducts(this.products);
+
+    this.productsDetail = _.filter(this.productsDetail, function (o) {
+      return o.product.id !== pd.product.id;
+    });
+  }
+
+  findProductDetailIndex(productAdded: ProductDetail): number {
+    let p = _.findIndex(this.productsDetail, function (o) {
+      return o.product.id === productAdded.product.id;
+    });
+
+    return p;
+  }
+
+  findProductIndex(product: any): number {
+    return _.findIndex(this.products, function (o: any) { return o.id === product.id });
   }
 
   calculateSubtotal(): number {
@@ -142,9 +176,9 @@ export class SalesAddComponent implements OnInit {
       this.ivas.forEach((i: any, index) => {
         if (moment().isBefore(i.startDate)) indexIva = index;
       })
-  
+
       currentIva = this.ivas[indexIva];
-  
+
       iva = this.calculateSubtotal() * (currentIva.iva / 100)
     }
 
@@ -153,20 +187,6 @@ export class SalesAddComponent implements OnInit {
 
   calculateTotal(): number {
     return this.calculateSubtotal() + this.calculateIva();
-  }
-
-  findProductDetailIndex(productAdded: ProductDetail): number {
-    let p = _.findIndex(this.productsDetail, function(o) {
-      return o.product.id === productAdded.product.id;
-    });
-
-    return p;
-  }
-
-  removePd(pd: ProductDetail) {
-    this.productsDetail = _.filter(this.productsDetail, function(o) {
-      return o.product.id !== pd.product.id;
-    });
   }
 
   saleIsValid(): boolean {
@@ -184,9 +204,23 @@ export class SalesAddComponent implements OnInit {
 
     this.saleService.save(saleToSend).pipe(
       tap(resp => {
-        localStorage.setItem('message', JSON.stringify(resp));
-        
-        this.router.navigate(['/sales/list']);
+        let statusProductUpdate = 0;
+        this.messageService.add({ severity: 'success', summary: '¡Éxito!', detail: resp.message });
+
+        this.productsDetail.forEach((pd: any) => {
+          let product = {
+            'id': pd.product.id,
+            'amountAvailable': pd.product.amountAvailable - pd.amount,
+          }
+
+          this.productService.update(product).subscribe(resp => {
+            statusProductUpdate = resp.status
+          });
+        });
+
+        if (statusProductUpdate === 200) {
+          this.router.navigate(['/sales/list']);
+        }
       })
     ).subscribe();
   }
