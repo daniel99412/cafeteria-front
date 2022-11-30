@@ -16,6 +16,10 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ProductsListComponent } from './products-list.component';
 import { ProductsListRoutingModule } from './products-list-routing.module';
 import { ProductService } from '../service/product.service';
+import { ProductIngredientService } from '../service/productIngredient.service';
+import { IngredientService } from 'src/app/ingredients/services/ingredient.service';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @NgModule({
   imports: [
@@ -32,9 +36,16 @@ import { ProductService } from '../service/product.service';
     ToastModule,
     BadgeModule,
     InputSwitchModule,
-    DropdownModule
+    DropdownModule,
+    AutoCompleteModule,
+    InputNumberModule
   ],
   declarations: [ ProductsListComponent ],
-  providers: [ ProductService, MessageService ]
+  providers: [
+    ProductService,
+    ProductIngredientService,
+    IngredientService,
+    MessageService,
+  ]
 })
 export class ProductsListModule { }

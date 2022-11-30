@@ -109,6 +109,53 @@
             <textarea name="description" [formControl]="description" pInputTextarea rows="5" cols="30"></textarea>
             <small id="description-help" class="p-invalid" *ngIf="!description.valid && description.touched">Descripción es requerido.</small>
         </div>
+        <div class="field">
+            <label for="hasIngredients">¿Tiene ingredientes?</label><br>
+            <p-inputSwitch name="hasIngredients" [formControl]="hasIngredients"></p-inputSwitch>
+        </div>
+        <ng-container *ngIf="hasIngredients.value">
+            <div class="field">
+                <label for="ingredient">Buscar ingrediente</label>
+                <p-autoComplete id="ingredient" [formControl]="chosenIngredient" [suggestions]="filteredIngredients"
+                    (completeMethod)="filterIngredients($event)" field="name" [dropdown]="true">
+                    <ng-template let-ingredient pTemplate="item">
+                        <div>{{ingredient.name | titlecase }}</div>
+                    </ng-template>
+                </p-autoComplete>
+            </div>
+            <div class="field">
+                <label for="amount">Cantidad</label>
+                <p-inputNumber id="amount" [formControl]="amount" [showButtons]="true" buttonLayout="horizontal"
+                    inputId="horizontal" spinnerMode="horizontal" mode="decimal" [step]=".1"
+                    [minFractionDigits]="2" decrementButtonClass="p-button-danger"
+                    incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
+                    [disabled]="!chosenIngredient.valid"></p-inputNumber>
+            </div>
+            <div class="field">
+                <button pButton type="button" icon="pi pi-plus" class="p-button-rounded p-button-success"
+                    (click)="addProductIngredient()"></button>
+            </div>
+            <p-table [value]="productsIngredients" styleClass="p-datatable-striped" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-center">Ingrediente</th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-pIngredient>
+                    <tr>
+                        <th class="text-center">{{pIngredient.amount}}</th>
+                        <th class="text-center">{{pIngredient.ingredient.name | titlecase }}</th>
+                        <th class="text-center">
+                            <button pButton pRipple type="button" icon="pi pi-trash"
+                                class="p-button-rounded p-button-danger p-button-text"
+                                (click)="removeProductIngredient(pIngredient)"></button>
+                        </th>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </ng-container>
     </div>
     <div class="col-12 p-buttonset">
         <button pButton pRipple label="Guardar" icon="pi pi-check" (click)="save()" [disabled]="!formValid()"></button>
@@ -189,6 +236,23 @@
         <div class="field">
             <label for="isActive">Activo</label><br>
             <p-inputSwitch name="isActive" [formControl]="isActive"></p-inputSwitch>
+        </div>
+        <div class="field">
+            <label>Ingredientes</label>
+            <p-table [value]="productsIngredients" styleClass="p-datatable-striped" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-center">Ingrediente</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-pIngredient>
+                    <tr>
+                        <th class="text-center">{{pIngredient.amount}}</th>
+                        <th class="text-center">{{pIngredient.ingredient.name | titlecase }}</th>
+                    </tr>
+                </ng-template>
+            </p-table>
         </div>
     </div>
 </p-sidebar>

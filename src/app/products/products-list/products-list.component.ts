@@ -1,8 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { MenuItem, MessageService } from 'primeng/api';
-import { tap } from 'rxjs';
+import { MessageService } from 'primeng/api';
+import { switchMap, tap } from 'rxjs';
+import { IngredientService } from 'src/app/ingredients/services/ingredient.service';
 import { ProductService } from '../service/product.service';
+import { ProductIngredientService } from '../service/productIngredient.service';
+import * as _ from 'lodash';
+
+export class ProductIngredient {
+  ingredient?: any;
+  amount?: number;
+}
 
 @Component({
   selector: 'app-products-list',
@@ -11,6 +19,10 @@ import { ProductService } from '../service/product.service';
 })
 export class ProductsListComponent implements OnInit {
   products!: [];
+  productsIngredients: ProductIngredient[] = [];
+  
+  ingredients!: [];
+  filteredIngredients!: any[];
 
   statuses = [
     { label: 'ACTIVO', value: true },
@@ -31,9 +43,14 @@ export class ProductsListComponent implements OnInit {
   amountAvailable = new FormControl(null, [Validators.min(0), Validators.required]);
   description = new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(100)]);
   isActive = new FormControl(null, [Validators.required]);
+  hasIngredients = new FormControl(null);
+  chosenIngredient = new FormControl(null);
+  amount = new FormControl(null);
 
   constructor(
     private productService: ProductService,
+    private prodIngrService: ProductIngredientService,
+    private ingredientService: IngredientService,
     private messageService: MessageService,
   ) { }
 
@@ -43,12 +60,62 @@ export class ProductsListComponent implements OnInit {
 
   loadData() {
     this.productService.findAll().pipe(
-      tap(resp => {
+      switchMap(resp => {
         this.products = resp;
         this.nextProduct = resp[resp.length-1].id + 1;
         this.id.setValue(this.nextProduct.toString());
+
+        return this.ingredientService.findAll();
+      }),
+      tap( resp => {
+        this.ingredients = resp;
       })
     ).subscribe();
+  }
+
+  filterIngredients(event: any) {
+    let query = event.query;
+    let filtered: any[] = [];
+
+    this.ingredients.forEach((i: any) => {
+      if (i.name.toLowerCase().indexOf(query.toLowerCase()) === 0) {
+        filtered.push(i);
+      }
+    });
+
+    this.filteredIngredients = filtered;
+  }
+
+  addProductIngredient() {
+    const newPi = new ProductIngredient();
+    newPi.ingredient = this.chosenIngredient.value!;
+    newPi.amount = +this.amount.value!;
+    console.log(newPi);
+
+    let already = this.findProductIngredientIndex(newPi);
+
+    switch(already) {
+      case -1:
+        this.productsIngredients.push(newPi);
+        break;
+      default:
+      this.productsIngredients[already].amount = this.productsIngredients[already].amount! + newPi.amount;
+    }
+
+    this.chosenIngredient.reset();
+    this.amount.reset();
+  }
+
+  findProductIngredientIndex(pi: ProductIngredient) {
+    return _.findIndex(this.productsIngredients, function (o: any) {
+      return o.ingredient.id === pi.ingredient.id;
+    });
+  }
+
+  removeProductIngredient(pi: ProductIngredient) {
+    this.productsIngredients = _.filter(this.productsIngredients, function (o: any) {
+      return o.ingredient.id !== o.ingredient.id;
+    });
   }
 
   next() {
@@ -86,7 +153,8 @@ export class ProductsListComponent implements OnInit {
       'name': this.name.value,
       'price': this.price.value,
       'amountAvailable': this.amountAvailable.value,
-      'description': this.description.value
+      'description': this.description.value,
+      'productIngredient': this.productsIngredients
     }
 
     this.productService.save(productToStore).pipe(
@@ -152,7 +220,11 @@ export class ProductsListComponent implements OnInit {
         this.description.disable();
         this.isActive.disable();
 
-        this.viewProduct = true;
+        this.prodIngrService.findByProduct(resp.id).subscribe(resp => {
+          this.productsIngredients = resp;
+          
+          this.viewProduct = true;
+        });
       })
     ).subscribe()
   }
@@ -184,6 +256,8 @@ export class ProductsListComponent implements OnInit {
     this.amountAvailable.enable();
     this.description.enable();
     this.isActive.enable();
+
+    this.productsIngredients = [];
 
     this.viewProduct = false;
   }

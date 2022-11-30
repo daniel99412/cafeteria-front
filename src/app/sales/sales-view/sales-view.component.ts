@@ -50,7 +50,7 @@ export class SalesViewComponent implements OnInit {
     let indexIva = 0;
     let currentIva!: any
 
-    if (this.ivas.length < 0) {
+    if (this.ivas.length > 0) {
       this.ivas.forEach((i: any, index) => {
         if (moment(this.sale.date).isBefore(i.startDate)) indexIva = index;
       })

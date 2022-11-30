@@ -213,9 +213,6 @@ export class PurchasesAddComponent implements OnInit {
         });
         
         this.router.navigate(['/purchases/list']);
-        // if (statusProductUpdate === 200) {
-        //   this.router.navigate(['/purchases/list']);
-        // }
       })
     ).subscribe();
   }
