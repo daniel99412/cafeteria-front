@@ -15,7 +15,7 @@ export class Sale {
   date?: string;
 }
 
-export class ProductDetail {
+export class SaleDetail {
   idSell?: number;
   product?: any;
   price?: number;
@@ -31,9 +31,9 @@ export class SalesAddComponent implements OnInit {
 
   sale: Sale = new Sale();
   products: any[] = [];
-  ivas = [];
+  taxes = [];
   filteredProducts!: any[];
-  productsDetail: ProductDetail[] = [];
+  saleDetails: SaleDetail[] = [];
 
   saleIdFc = new FormControl({ value: '', disabled: true });
   saleEmplyeeNameFc = new FormControl({ value: '', disabled: true });
@@ -69,7 +69,7 @@ export class SalesAddComponent implements OnInit {
         return this.ivaService.findAll();
       }),
       map(ivas => {
-        this.ivas = ivas;
+        this.taxes = ivas;
       })
     ).subscribe();
 
@@ -105,22 +105,22 @@ export class SalesAddComponent implements OnInit {
     this.filteredProducts = filtered;
   }
 
-  addProductDetail() {
-    const newPd = new ProductDetail();
-    newPd.product = this.chosenProduct.value!;
-    newPd.amount = +this.chosenProductAmount.value!;
-    newPd.price = +this.chosenProductPrice.value!;
-    const productIndx = this.findProductIndex(newPd.product);
-    this.products[productIndx].amountAvailable = this.products[productIndx].amountAvailable - newPd.amount;
+  addSaleDetail() {
+    const newSd = new SaleDetail();
+    newSd.product = this.chosenProduct.value!;
+    newSd.amount = +this.chosenProductAmount.value!;
+    newSd.price = +this.chosenProductPrice.value!;
+    const productIndx = this.findProductIndex(newSd.product);
+    this.products[productIndx].amountAvailable = this.products[productIndx].amountAvailable - newSd.amount;
 
-    let already = this.findProductDetailIndex(newPd);
+    let already = this.findSaleDetailIndex(newSd);
 
     switch (already) {
       case -1:
-        this.productsDetail.push(newPd);
+        this.saleDetails.push(newSd);
         break;
       default:
-        this.productsDetail[already].amount = this.productsDetail[already].amount! + newPd.amount;
+        this.saleDetails[already].amount = this.saleDetails[already].amount! + newSd.amount;
         break;
     }
 
@@ -132,19 +132,19 @@ export class SalesAddComponent implements OnInit {
     this.chosenProductAmount.reset('');
   }
 
-  removeProductDetail(pd: ProductDetail) {
-    const productIndx = this.findProductIndex(pd.product);
-    this.products[productIndx].amountAvailable = this.products[productIndx].amountAvailable + pd.amount;
+  removeSaleDetail(sd: SaleDetail) {
+    const productIndx = this.findProductIndex(sd.product);
+    this.products[productIndx].amountAvailable = this.products[productIndx].amountAvailable + sd.amount;
 
     this.products = this.setUpProducts(this.products);
 
-    this.productsDetail = _.filter(this.productsDetail, function (o) {
-      return o.product.id !== pd.product.id;
+    this.saleDetails = _.filter(this.saleDetails, function (o) {
+      return o.product.id !== sd.product.id;
     });
   }
 
-  findProductDetailIndex(productAdded: ProductDetail): number {
-    let p = _.findIndex(this.productsDetail, function (o) {
+  findSaleDetailIndex(productAdded: SaleDetail): number {
+    let p = _.findIndex(this.saleDetails, function (o) {
       return o.product.id === productAdded.product.id;
     });
 
@@ -158,8 +158,8 @@ export class SalesAddComponent implements OnInit {
   calculateSubtotal(): number {
     let subtotal = 0;
 
-    if (this.productsDetail.length > 0) {
-      this.productsDetail.forEach((p: any) => {
+    if (this.saleDetails.length > 0) {
+      this.saleDetails.forEach((p: any) => {
         subtotal = subtotal + (p.amount * p.price)
       });
     }
@@ -167,30 +167,30 @@ export class SalesAddComponent implements OnInit {
     return subtotal;
   }
 
-  calculateIva(): number {
-    let iva = 0;
-    let indexIva = 0;
-    let currentIva!: any
+  calculateTaxes(): number {
+    let tax = 0;
+    let indexTaxes = 0;
+    let currentTax!: any
 
-    if (this.ivas.length > 0) {
-      this.ivas.forEach((i: any, index) => {
-        if (moment().isBefore(i.startDate)) indexIva = index;
+    if (this.taxes.length > 0) {
+      this.taxes.forEach((i: any, index) => {
+        if (moment().isBefore(i.startDate)) indexTaxes = index;
       })
 
-      currentIva = this.ivas[indexIva];
+      currentTax = this.taxes[indexTaxes];
 
-      iva = this.calculateSubtotal() * (currentIva.iva / 100)
+      tax = this.calculateSubtotal() * (currentTax.iva / 100)
     }
 
-    return iva;
+    return tax;
   }
 
   calculateTotal(): number {
-    return this.calculateSubtotal() + this.calculateIva();
+    return this.calculateSubtotal() + this.calculateTaxes();
   }
 
   saleIsValid(): boolean {
-    if (this.productsDetail.length !== 0) {
+    if (this.saleDetails.length !== 0) {
       return false;
     }
     return true;
@@ -199,7 +199,7 @@ export class SalesAddComponent implements OnInit {
   save() {
     const saleToSend = {
       'sale': this.sale,
-      'detailsSale': this.productsDetail
+      'detailsSale': this.saleDetails
     }
 
     this.saleService.save(saleToSend).pipe(
@@ -207,7 +207,7 @@ export class SalesAddComponent implements OnInit {
         let statusProductUpdate = 0;
         this.messageService.add({ severity: 'success', summary: '¡Éxito!', detail: resp.message });
 
-        this.productsDetail.forEach((pd: any) => {
+        this.saleDetails.forEach((pd: any) => {
           let product = {
             'id': pd.product.id,
             'amountAvailable': pd.product.amountAvailable - pd.amount,

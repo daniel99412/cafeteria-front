@@ -1,1 +1,123 @@
-<p>purchases-add works!</p>
+<p-toast position="top-right"></p-toast>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h5>Agregar Compra</h5>
+            <div class="grid">
+                <div class="col-12">
+                    <div class="grid align-items-center">
+                        <div class="col-11">
+                            <div class="grid">
+                                <div class="p-fluid col-2">
+                                    <label for="id"># Compra</label>
+                                    <input id="id" type="number" [formControl]="purchaseIdFc" pInputText>
+                                </div>
+                                <div class="p-fluid col-8">
+                                    <label for="supplierList">Buscar proveedor</label>
+                                    <p-autoComplete id="supplierList" [formControl]="chosenSupplier" [suggestions]="filteredSuppliers"
+                                        (completeMethod)="filterSuppliers($event)" field="name" [dropdown]="true">
+                                        <ng-template let-supplier pTemplate="item">
+                                            <div>{{ supplier.name | titlecase }}</div>
+                                        </ng-template>
+                                    </p-autoComplete>
+                                </div>
+                                <div class="p-fluid col-2">
+                                    <label for="date">Fecha</label>
+                                    <p-calendar [formControl]="purchaseDateFc" dateFormat="d mm yy" [showTime]="true"
+                                        [showIcon]="true" inputId="icon">
+                                    </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-1 text-right">
+                            <button pButton type="button" icon="pi pi-save" (click)="save()"
+                                class="p-button-rounded p-button-success mr-2"
+                                [disabled]="purchaseIsValid()"></button>
+                            <button pButton pRipple type="button" icon="pi pi-times"
+                                class="p-button-rounded p-button-danger" routerLink="/purchases/list"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="grid align-items-center">
+                <div class="p-fluid col-6">
+                    <div class="field">
+                        <label for="productList">Buscar producto</label>
+                        <p-autoComplete id="productList" [formControl]="chosenProduct" [suggestions]="filteredProducts"
+                            (completeMethod)="filterProducts($event)" field="name" [dropdown]="true">
+                            <ng-template let-product pTemplate="item">
+                                <div>{{product.name | titlecase}}</div>
+                            </ng-template>
+                        </p-autoComplete>
+                    </div>
+                </div>
+                <div class="p-fluid col-3">
+                    <div class="field">
+                        <label for="price">Precio</label>
+                        <p-inputNumber id="price" [formControl]="chosenProductPrice" [showButtons]="true" buttonLayout="horizontal"
+                            inputId="horizontal" spinnerMode="horizontal" mode="decimal" [step]=".1" 
+                            [minFractionDigits]="2" decrementButtonClass="p-button-danger"
+                            incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
+                            [disabled]="!chosenProduct.valid"></p-inputNumber>
+                    </div>
+                </div>
+                <div class="p-fluid col-2">
+                    <div class="field">
+                        <label for="amount">Cantidad</label>
+                        <p-inputNumber id="amount" [formControl]="chosenProductAmount" [showButtons]="true"
+                            buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1"
+                            decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success"
+                            incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
+                            [disabled]="!chosenProduct.valid"></p-inputNumber>
+                    </div>
+                </div>
+                <div class="p-fluid col-1">
+                    <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-rounded p-button-success"
+                        (click)="addPurchaseDetail()"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <p-table [value]="purchaseDetails" styleClass="p-datatable-striped" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-center">Descripción</th>
+                        <th class="text-center">Precio Unitario</th>
+                        <th class="text-center">Importe</th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-pDetail>
+                    <tr>
+                        <th class="text-center">{{pDetail.amount}}</th>
+                        <th class="text-center">{{pDetail.product.name}}</th>
+                        <th class="text-center">$ {{pDetail.price | number: '1.2'}}</th>
+                        <th class="text-center">$ {{pDetail.amount * pDetail.price | number: '1.2'}}</th>
+                        <th> <button pButton pRipple type="button" icon="pi pi-trash"
+                                class="p-button-rounded p-button-danger p-button-text"
+                                (click)="removePurchaseDetail(pDetail)"></button> </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <tr>
+                        <td colspan="4" class="text-right">Subtotal</td>
+                        <td class="text-left">$ {{ calculateSubtotal() | number: '1.2' }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-right">IVA</td>
+                        <td class="text-left">$ {{ calculateTaxes() | number: '1.2'}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-right">Total</td>
+                        <td class="text-left">$ {{ calculateTotal() | number: '1.2'}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

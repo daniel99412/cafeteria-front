@@ -1,1 +1,67 @@
-<p>purchases-list works!</p>
+<p-toast position="top-right"></p-toast>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h5>Ventas</h5>
+            <div class="grid">
+                <div class="col-12">
+                    <div class="grid">
+                        <div class="col-offset-4 col-4 text-center">
+                            <div class="p-mb-3 mb-1">
+                                <button pButton pRipple type="button" icon="pi pi-chevron-left" (click)="prev()"
+                                    [disabled]="isFirstPage()" class="p-button-rounded p-button-text"></button>
+                                <button pButton pRipple type="button" icon="pi pi-refresh" (click)="reset()"
+                                    class="p-button-rounded p-button-text"></button>
+                                <button pButton pRipple type="button" icon="pi pi-chevron-right" (click)="next()"
+                                    [disabled]="isLastPage()" class="p-button-rounded p-button-text"></button>
+                            </div>
+                        </div>
+                        <div class="col-4 text-right">
+                            <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-rounded"
+                                [routerLink]="['/purchases/add', nextPurchaseId]"></button>
+                        </div>
+                    </div>
+
+                    <p-table #employeesDt [value]="purchases" [paginator]="true" [rows]="rows"
+                        [showCurrentPageReport]="true" [(first)]="first" responsiveLayout="scroll" dataKey="id"
+                        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} entradas"
+                        [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['id','name','rfc','position']">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th class="text-center"># Compra</th>
+                                <th class="text-center">Proveedor</th>
+                                <th class="text-center">Fecha</th>
+                                <th class="text-center">Total</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <p-columnFilter type="text" field="id"></p-columnFilter>
+                                </th>
+                                <th>
+                                    <p-columnFilter type="text" field="supplier.name"></p-columnFilter>
+                                </th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-purchase>
+                            <tr>
+                                <td class="text-center">{{ purchase.id }}</td>
+                                <td class="text-center">{{ purchase.supplier.name | titlecase }}</td>
+                                <td class="text-center">{{ formatDate(purchase.date) }}</td>
+                                <td class="text-center">$ {{ calculateTotal(purchase) }}</td>
+                                <td class="text-center">
+                                    <button pButton type="button" icon="pi pi-eye"
+                                        class="p-button-rounded p-button-info ml-1"
+                                        [routerLink]="['/purchases/view', purchase.id]"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
